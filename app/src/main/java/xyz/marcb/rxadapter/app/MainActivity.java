@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.registerViewHolder(HeaderViewHolder.class, parent ->
                 new HeaderViewHolder(
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false)
-                )
+                ), null
         );
 
         final Section headerSection = adapter.addSection();
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.registerViewHolder(DateViewHolder.class, parent ->
                 new DateViewHolder(
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false)
-                )
+                ), null
         );
 
         final Section datesSection = adapter.addSection();
