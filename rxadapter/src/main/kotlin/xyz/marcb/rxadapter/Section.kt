@@ -17,6 +17,10 @@ class Section: AdapterPart {
         return add(Item(vhClass))
     }
 
+    fun <I, VH: RecyclerView.ViewHolder> addItem(vhClass: Class<VH>, item: Observable<I?>): OptionalItem<I, VH> {
+        return add(OptionalItem(vhClass, item))
+    }
+
     fun <I, VH: RecyclerView.ViewHolder> addItems(vhClass: Class<VH>, items: List<I>): Items<I, VH> {
         return addItems(vhClass, Observable.just(items))
     }
