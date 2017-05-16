@@ -6,6 +6,7 @@ import rx.Observable
 class Item<VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>) : AdapterPart {
 
     var binder: ((VH) -> Unit)? = null
+    override var visible: Observable<Boolean>? = null
 
     override val snapshots: Observable<AdapterPartSnapshot> get() {
         return Observable.just(ItemSnapshot())

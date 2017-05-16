@@ -5,6 +5,12 @@ import rx.Observable
 
 class Section: AdapterPart {
 
+    override val snapshots: Observable<AdapterPartSnapshot> get() {
+        return parts.combine()
+    }
+
+    override var visible: Observable<Boolean>? = null
+
     private val parts = ArrayList<AdapterPart>()
 
     fun <VH: RecyclerView.ViewHolder> addItem(vhClass: Class<VH>): Item<VH> {
@@ -19,17 +25,7 @@ class Section: AdapterPart {
         return add(Items(vhClass, items))
     }
 
-    // AdapterPart impl
-
-    override val snapshots: Observable<AdapterPartSnapshot> get() {
-        return Observable.combineLatest(parts.map { it.snapshots }) { snapshots ->
-            CompositeAdapterPart(snapshots.map { it as AdapterPartSnapshot })
-        }
-    }
-
-    // Private
-
-    private fun <R: AdapterPart> add(part: R): R {
+    internal fun <R: AdapterPart> add(part: R): R {
         parts.add(part)
         return part
     }

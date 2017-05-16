@@ -9,6 +9,7 @@ class Items<I, VH: RecyclerView.ViewHolder>(
     : AdapterPart {
 
     var binder: ((I, VH) -> Unit)? = null
+    override var visible: Observable<Boolean>? = null
 
     override val snapshots: Observable<AdapterPartSnapshot> get() {
         return items.map { items -> ItemsSnapshot(items) }

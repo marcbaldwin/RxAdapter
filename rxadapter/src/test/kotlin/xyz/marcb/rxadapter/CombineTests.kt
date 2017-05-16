@@ -1,0 +1,61 @@
+package xyz.marcb.rxadapter
+
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
+import rx.Observable
+import rx.observers.TestSubscriber
+import kotlin.test.expect
+
+class CombineTests {
+
+    @Mock lateinit var adapterPartA: AdapterPart
+    @Mock lateinit var adapterPartB: AdapterPart
+
+    @Mock lateinit var adapterPartSnapshotA: AdapterPartSnapshot
+    @Mock lateinit var adapterPartSnapshotB: AdapterPartSnapshot
+
+    lateinit var snapshotSubscriber: TestSubscriber<AdapterPartSnapshot>
+
+
+    @Before fun setUp() {
+        MockitoAnnotations.initMocks(this)
+
+        Mockito.`when`(adapterPartA.snapshots).thenReturn(Observable.just(adapterPartSnapshotA))
+        Mockito.`when`(adapterPartB.snapshots).thenReturn(Observable.just(adapterPartSnapshotB))
+        Mockito.`when`(adapterPartSnapshotA.itemCount).thenReturn(1)
+        Mockito.`when`(adapterPartSnapshotB.itemCount).thenReturn(2)
+
+        snapshotSubscriber = TestSubscriber()
+    }
+
+    @Test fun includesSnapshotsWithNoVisibilityObservable() {
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+
+        expect(3) { snapshotSubscriber.onNextEvents[0].itemCount }
+    }
+
+    @Test fun includesVisibleSnapshots() {
+        Mockito.`when`(adapterPartB.visible).thenReturn(Observable.just(true))
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+
+        expect(3) { snapshotSubscriber.onNextEvents[0].itemCount }
+    }
+
+    @Test fun ignoresHiddenSnapshots() {
+        Mockito.`when`(adapterPartB.visible).thenReturn(Observable.just(false))
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+
+        expect(1) { snapshotSubscriber.onNextEvents[0].itemCount }
+    }
+
+    @Test fun emitsNewSnapshotWhenVisibilityChanges() {
+        Mockito.`when`(adapterPartB.visible).thenReturn(Observable.just(false, true))
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+
+        expect(1) { snapshotSubscriber.onNextEvents[0].itemCount }
+        expect(3) { snapshotSubscriber.onNextEvents[1].itemCount }
+    }
+}

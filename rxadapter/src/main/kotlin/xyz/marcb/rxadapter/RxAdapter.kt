@@ -2,7 +2,6 @@ package xyz.marcb.rxadapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import rx.Observable
 
 class RxAdapter {
 
@@ -32,17 +31,15 @@ class RxAdapter {
 }
 
 internal class Adapter(
-        val vhFactories: Map<Int, (ViewGroup) -> RecyclerView.ViewHolder>,
-        val vhRecylers: Map<Int, (RecyclerView.ViewHolder) -> Unit>,
-        parts: ArrayList<AdapterPart>)
+        private val vhFactories: Map<Int, (ViewGroup) -> RecyclerView.ViewHolder>,
+        private val vhRecyclers: Map<Int, (RecyclerView.ViewHolder) -> Unit>,
+        parts: List<AdapterPart>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var snapshot: AdapterPartSnapshot? = null
 
     init {
-        Observable.combineLatest(parts.map { it.snapshots }) { snapshots ->
-            CompositeAdapterPart(snapshots.map { it as AdapterPartSnapshot })
-        }.subscribe { newSnapshot ->
+        parts.combine().subscribe { newSnapshot ->
             snapshot = newSnapshot
             notifyDataSetChanged()
         }
@@ -66,6 +63,6 @@ internal class Adapter(
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-        vhRecylers[holder.javaClass.hashCode()]?.invoke(holder)
+        vhRecyclers[holder.javaClass.hashCode()]?.invoke(holder)
     }
 }

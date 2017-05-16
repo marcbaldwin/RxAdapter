@@ -21,21 +21,25 @@ internal class ItemTests {
                 vh.bind("Test")
             }
         }
+    }
+
+    fun subscribeTakeFirst(): AdapterPartSnapshot {
         item.snapshots.subscribe(snapshotSubscriber)
+        return snapshotSubscriber.onNextEvents[0]
     }
 
     @Test fun itemCountIsAlwaysOne() {
-        val snapshot = snapshotSubscriber.onNextEvents[0]
+        val snapshot = subscribeTakeFirst()
         expect(1) { snapshot.itemCount }
     }
 
     @Test fun viewHolderClass() {
-        val snapshot = snapshotSubscriber.onNextEvents[0]
+        val snapshot = subscribeTakeFirst()
         expect(HeaderViewHolder::class.java) { snapshot.viewHolderClass(0) }
     }
 
     @Test fun binderIsInvoked() {
-        val snapshot = snapshotSubscriber.onNextEvents[0]
+        val snapshot = subscribeTakeFirst()
         snapshot.bind(viewHolder, index = 0)
         Mockito.verify(viewHolder).bind("Test")
     }

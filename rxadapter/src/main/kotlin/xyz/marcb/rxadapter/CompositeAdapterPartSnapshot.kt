@@ -2,9 +2,7 @@ package xyz.marcb.rxadapter
 
 import android.support.v7.widget.RecyclerView
 
-internal class CompositeAdapterPart(val parts: List<AdapterPartSnapshot>) : AdapterPartSnapshot {
-
-    // AdapterPartSnapshot impl
+internal class CompositeAdapterPartSnapshot(val parts: List<AdapterPartSnapshot>) : AdapterPartSnapshot {
 
     override val itemCount: Int get() {
         return parts.sumBy { it.itemCount }
@@ -19,8 +17,6 @@ internal class CompositeAdapterPart(val parts: List<AdapterPartSnapshot>) : Adap
         val adapterWithIndex = adapterWithAdjustedIndex(index)
         adapterWithIndex.first.bind(viewHolder, index = adapterWithIndex.second)
     }
-
-    // Private
 
     internal fun adapterWithAdjustedIndex(index: Int): Pair<AdapterPartSnapshot, Int> {
         var currentIndex = 0
