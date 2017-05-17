@@ -50,6 +50,7 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        vhRecyclers[holder.javaClass.hashCode()]?.invoke(holder)
         snapshot?.bind(holder, position)
     }
 
