@@ -10,8 +10,9 @@ class RxAdapter {
     private val vhFactories = HashMap<Int, (ViewGroup) -> RecyclerView.ViewHolder>()
     private val vhRecyclers = HashMap<Int, (RecyclerView.ViewHolder) -> Unit>()
 
-    fun addSection(): Section {
+    fun section(init: (Section.() -> Unit)? = null): Section {
         val section = Section()
+        init?.invoke(section)
         sections.add(section)
         return section
     }
@@ -47,9 +48,7 @@ internal class Adapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return snapshot.itemCount
-    }
+    override fun getItemCount(): Int = snapshot.itemCount
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         vhRecyclers[holder.javaClass.hashCode()]?.invoke(holder)

@@ -11,20 +11,26 @@ class Section: AdapterPart {
 
     private val parts = ArrayList<AdapterPart>()
 
-    fun <VH: RecyclerView.ViewHolder> addItem(vhClass: Class<VH>): Item<VH> {
-        return add(Item(vhClass))
+    fun <VH: RecyclerView.ViewHolder> item(vhClass: Class<VH>, init: (Item<VH>.() -> Unit)? = null): Item<VH> {
+        val part = add(Item(vhClass))
+        init?.invoke(part)
+        return part
     }
 
-    fun <I, VH: RecyclerView.ViewHolder> addItem(vhClass: Class<VH>, item: Observable<I?>): OptionalItem<I, VH> {
-        return add(OptionalItem(vhClass, item))
+    fun <I, VH: RecyclerView.ViewHolder> item(vhClass: Class<VH>, item: Observable<I?>, init: (OptionalItem<I, VH>.() -> Unit)? = null): OptionalItem<I, VH> {
+        val part = add(OptionalItem(vhClass, item))
+        init?.invoke(part)
+        return part
     }
 
-    fun <I, VH: RecyclerView.ViewHolder> addItems(vhClass: Class<VH>, items: List<I>): Items<I, VH> {
-        return addItems(vhClass, Observable.just(items))
+    fun <I, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: List<I>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
+        return items(vhClass, Observable.just(items), init)
     }
 
-    fun <I, VH: RecyclerView.ViewHolder> addItems(vhClass: Class<VH>, items: Observable<List<I>>): Items<I, VH> {
-        return add(Items(vhClass, items))
+    fun <I, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: Observable<List<I>>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
+        val part = add(Items(vhClass, items))
+        init?.invoke(part)
+        return part
     }
 
     internal fun <R: AdapterPart> add(part: R): R {

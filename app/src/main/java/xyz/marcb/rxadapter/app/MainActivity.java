@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 ), null
         );
 
-        final Section headerSection = adapter.addSection();
-        final Item<HeaderViewHolder> headerRow = headerSection.addItem(HeaderViewHolder.class);
+        final Section headerSection = adapter.section(null);
+        final Item<HeaderViewHolder> headerRow = headerSection.item(HeaderViewHolder.class, null);
         headerRow.setBinder(viewHolder -> {
             viewHolder.title.setText("Dates to Remember");
             return null;
@@ -72,15 +72,15 @@ public class MainActivity extends AppCompatActivity {
                 ), null
         );
 
-        final Section datesSection = adapter.addSection();
+        final Section datesSection = adapter.section(null);
 
-        final Item<DateViewHolder> now = datesSection.addItem(DateViewHolder.class);
+        final Item<DateViewHolder> now = datesSection.item(DateViewHolder.class, null);
         now.setBinder((viewHolder -> {
             viewHolder.title.setText("TODAY");
             return null;
         }));
 
-        final Items<Date, DateViewHolder> items = datesSection.addItems(DateViewHolder.class, this.items);
+        final Items<Date, DateViewHolder> items = datesSection.items(DateViewHolder.class, this.items, null);
         items.setId((date -> "" + date.hashCode()));
         items.setBinder((date, viewHolder) -> {
             viewHolder.title.setText(date.toLocaleString());
