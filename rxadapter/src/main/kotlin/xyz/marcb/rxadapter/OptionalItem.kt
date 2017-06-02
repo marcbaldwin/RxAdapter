@@ -2,11 +2,14 @@ package xyz.marcb.rxadapter
 
 import android.support.v7.widget.RecyclerView
 import rx.Observable
+import java.util.*
 
 class OptionalItem<I, VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>, val item: Observable<I?>) : AdapterPart {
 
     var binder: ((I, VH) -> Unit)? = null
     override var visible: Observable<Boolean>? = null
+
+    private val id = UUID.randomUUID().toString()
 
     override val snapshots: Observable<AdapterPartSnapshot> get() {
         return item.map { item ->
@@ -16,7 +19,7 @@ class OptionalItem<I, VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>, val i
 
     internal inner class Snapshot(val item: I): AdapterPartSnapshot {
 
-        override val itemCount: Int = 1
+        override val itemIds: List<String> = listOf(id)
 
         override fun viewHolderClass(index: Int): Class<VH> = vhClass
 

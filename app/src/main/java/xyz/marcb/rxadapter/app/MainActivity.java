@@ -81,8 +81,14 @@ public class MainActivity extends AppCompatActivity {
         }));
 
         final Items<Date, DateViewHolder> items = datesSection.addItems(DateViewHolder.class, this.items);
+        items.setId((date -> "" + date.hashCode()));
         items.setBinder((date, viewHolder) -> {
             viewHolder.title.setText(date.toLocaleString());
+            viewHolder.itemView.setOnClickListener((view) -> {
+                final List<Date> newItems = new ArrayList<>(this.items.getValue());
+                newItems.remove(date);
+                this.items.onNext(newItems);
+            });
             return null;
         });
 

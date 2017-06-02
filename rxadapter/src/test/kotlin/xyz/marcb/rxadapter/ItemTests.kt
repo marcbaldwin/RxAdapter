@@ -17,9 +17,7 @@ internal class ItemTests {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
         item = Item(HeaderViewHolder::class.java).apply {
-            binder = { vh ->
-                vh.bind("Test")
-            }
+            binder = { vh -> vh.bind("Test") }
         }
     }
 

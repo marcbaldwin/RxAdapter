@@ -1,5 +1,6 @@
 package xyz.marcb.rxadapter
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
@@ -36,26 +37,27 @@ internal class Adapter(
         parts: List<AdapterPart>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var snapshot: AdapterPartSnapshot? = null
+    private var snapshot: AdapterPartSnapshot = EmptySnapshot()
 
     init {
         parts.combine().subscribe { newSnapshot ->
+            val diff = DiffUtil.calculateDiff(AdapterPartSnapshotDelta(snapshot, newSnapshot))
             snapshot = newSnapshot
-            notifyDataSetChanged()
+            diff.dispatchUpdatesTo(this)
         }
     }
 
     override fun getItemCount(): Int {
-        return snapshot?.itemCount ?: 0
+        return snapshot.itemCount
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         vhRecyclers[holder.javaClass.hashCode()]?.invoke(holder)
-        snapshot?.bind(holder, position)
+        snapshot.bind(holder, position)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return snapshot!!.viewHolderClass(position).hashCode()
+        return snapshot.viewHolderClass(position).hashCode()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

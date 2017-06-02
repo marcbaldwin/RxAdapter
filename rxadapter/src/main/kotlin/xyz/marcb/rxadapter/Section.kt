@@ -5,9 +5,7 @@ import rx.Observable
 
 class Section: AdapterPart {
 
-    override val snapshots: Observable<AdapterPartSnapshot> get() {
-        return parts.combine()
-    }
+    override val snapshots: Observable<AdapterPartSnapshot> get() = parts.combine()
 
     override var visible: Observable<Boolean>? = null
 

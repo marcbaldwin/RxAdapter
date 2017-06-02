@@ -19,11 +19,21 @@ internal class CompositeAdapterPartSnapshotTests {
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
-        snapshot = CompositeAdapterPartSnapshot(parts = listOf(partA, partB, partC))
 
+        Mockito.`when`(partA.itemIds).thenReturn(listOf("A"))
         Mockito.`when`(partA.itemCount).thenReturn(1)
+
+        Mockito.`when`(partB.itemIds).thenReturn(listOf("B", "C"))
         Mockito.`when`(partB.itemCount).thenReturn(2)
+
+        Mockito.`when`(partC.itemIds).thenReturn(listOf("D"))
         Mockito.`when`(partC.itemCount).thenReturn(1)
+
+        snapshot = CompositeAdapterPartSnapshot(parts = listOf(partA, partB, partC))
+    }
+
+    @Test fun itemIdsAreOrderedAggregationOfPartItemIds() {
+        expect(listOf("A", "B", "C", "D")) { snapshot.itemIds }
     }
 
     @Test fun itemCountIsSumOfParts() {

@@ -21,9 +21,7 @@ class OptionalItemTests {
 
     fun createWith(observable: Observable<String?>) {
         item = OptionalItem(HeaderViewHolder::class.java, observable).apply {
-            binder = { item, viewHolder ->
-                viewHolder.bind(item)
-            }
+            binder = { item, viewHolder -> viewHolder.bind(item) }
         }
         item.snapshots.subscribe(snapshotSubscriber)
     }

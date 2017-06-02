@@ -4,18 +4,16 @@ import android.support.v7.widget.RecyclerView
 
 internal class CompositeAdapterPartSnapshot(val parts: List<AdapterPartSnapshot>) : AdapterPartSnapshot {
 
-    override val itemCount: Int get() {
-        return parts.sumBy { it.itemCount }
-    }
+    override val itemIds: List<String> = parts.flatMap { it.itemIds }
 
     override fun viewHolderClass(index: Int): Class<out RecyclerView.ViewHolder> {
-        val adapterWithIndex = adapterWithAdjustedIndex(index)
-        return adapterWithIndex.first.viewHolderClass(adapterWithIndex.second)
+        val (adapter, adjustedIndex) = adapterWithAdjustedIndex(index)
+        return adapter.viewHolderClass(index = adjustedIndex)
     }
 
     override fun bind(viewHolder: RecyclerView.ViewHolder, index: Int) {
-        val adapterWithIndex = adapterWithAdjustedIndex(index)
-        adapterWithIndex.first.bind(viewHolder, index = adapterWithIndex.second)
+        val (adapter, adjustedIndex) = adapterWithAdjustedIndex(index)
+        adapter.bind(viewHolder, index = adjustedIndex)
     }
 
     internal fun adapterWithAdjustedIndex(index: Int): Pair<AdapterPartSnapshot, Int> {

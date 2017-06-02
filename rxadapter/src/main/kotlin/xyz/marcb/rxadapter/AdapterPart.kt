@@ -11,7 +11,8 @@ interface AdapterPart {
 
 interface AdapterPartSnapshot {
 
-    val itemCount: Int
+    val itemIds: List<String>
+    val itemCount: Int get() = itemIds.size
 
     fun viewHolderClass(index: Int): Class<out RecyclerView.ViewHolder>
     fun bind(viewHolder: RecyclerView.ViewHolder, index: Int)
@@ -35,7 +36,7 @@ internal fun List<AdapterPart>.combine(): Observable<AdapterPartSnapshot> {
 
 internal class EmptySnapshot : AdapterPartSnapshot {
 
-    override val itemCount: Int = 0
+    override val itemIds: List<String> = emptyList()
 
     override fun viewHolderClass(index: Int): Class<out RecyclerView.ViewHolder> {
         error("Internal error: Attempted to get view holder class from an empty snapshot")
