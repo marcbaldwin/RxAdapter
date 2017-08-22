@@ -25,5 +25,7 @@ class Item<VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>) : AdapterPart {
         override fun bind(viewHolder: RecyclerView.ViewHolder, index: Int) {
             binder?.invoke(viewHolder as VH)
         }
+
+        override fun underlyingObject(index: Int): Any = this
     }
 }

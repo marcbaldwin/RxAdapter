@@ -17,17 +17,17 @@ class Section: AdapterPart {
         return part
     }
 
-    fun <I, VH: RecyclerView.ViewHolder> item(vhClass: Class<VH>, item: Observable<I?>, init: (OptionalItem<I, VH>.() -> Unit)? = null): OptionalItem<I, VH> {
+    fun <I: Any, VH: RecyclerView.ViewHolder> item(vhClass: Class<VH>, item: Observable<I?>, init: (OptionalItem<I, VH>.() -> Unit)? = null): OptionalItem<I, VH> {
         val part = add(OptionalItem(vhClass, item))
         init?.invoke(part)
         return part
     }
 
-    fun <I, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: List<I>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
+    fun <I: Any, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: List<I>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
         return items(vhClass, Observable.just(items), init)
     }
 
-    fun <I, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: Observable<List<I>>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
+    fun <I: Any, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: Observable<List<I>>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
         val part = add(Items(vhClass, items))
         init?.invoke(part)
         return part

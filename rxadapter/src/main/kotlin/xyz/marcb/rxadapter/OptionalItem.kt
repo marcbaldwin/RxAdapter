@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import rx.Observable
 import java.util.*
 
-class OptionalItem<I, VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>, val item: Observable<I?>) : AdapterPart {
+class OptionalItem<I: Any, VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>, val item: Observable<I?>) : AdapterPart {
 
     var binder: ((I, VH) -> Unit)? = null
     override var visible: Observable<Boolean>? = null
@@ -27,5 +27,7 @@ class OptionalItem<I, VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>, val i
         override fun bind(viewHolder: RecyclerView.ViewHolder, index: Int) {
             binder?.invoke(item, viewHolder as VH)
         }
+
+        override fun underlyingObject(index: Int): Any = item
     }
 }

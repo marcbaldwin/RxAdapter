@@ -16,6 +16,7 @@ interface AdapterPartSnapshot {
 
     fun viewHolderClass(index: Int): Class<out RecyclerView.ViewHolder>
     fun bind(viewHolder: RecyclerView.ViewHolder, index: Int)
+    fun underlyingObject(index: Int): Any
 }
 
 internal fun AdapterPart.compose(): Observable<AdapterPartSnapshot> {
@@ -44,5 +45,9 @@ internal class EmptySnapshot : AdapterPartSnapshot {
 
     override fun bind(viewHolder: RecyclerView.ViewHolder, index: Int) {
         error("Internal error: Attempted to bind view holder to an empty snapshot")
+    }
+
+    override fun underlyingObject(index: Int): Any {
+        error("Internal error: Attempted to get underlying object of an empty snapshot")
     }
 }

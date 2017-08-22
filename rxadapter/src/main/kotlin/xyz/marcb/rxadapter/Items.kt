@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import rx.Observable
 import java.util.*
 
-class Items<I, VH: RecyclerView.ViewHolder>(
+class Items<I: Any, VH: RecyclerView.ViewHolder>(
         val vhClass: Class<VH>,
         val items: Observable<List<I>>)
     : AdapterPart {
@@ -27,5 +27,7 @@ class Items<I, VH: RecyclerView.ViewHolder>(
         override fun bind(viewHolder: RecyclerView.ViewHolder, index: Int) {
             binder?.invoke(items[index], viewHolder as VH)
         }
+
+        override fun underlyingObject(index: Int): Any = items[index]
     }
 }

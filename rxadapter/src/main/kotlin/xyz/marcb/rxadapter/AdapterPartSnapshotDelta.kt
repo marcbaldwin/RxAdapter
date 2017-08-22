@@ -12,6 +12,6 @@ internal class AdapterPartSnapshotDelta(val old: AdapterPartSnapshot, val new: A
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return false
+        return old.underlyingObject(oldItemPosition) == new.underlyingObject(newItemPosition)
     }
 }
