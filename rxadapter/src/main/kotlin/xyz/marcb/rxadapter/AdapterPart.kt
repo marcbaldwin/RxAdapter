@@ -21,17 +21,14 @@ interface AdapterPartSnapshot {
 
 internal fun AdapterPart.compose(): Observable<AdapterPartSnapshot> {
     val visible = visible?.let { it } ?: return snapshots
-    return visible.switchMap { visible ->
-        if (visible) snapshots else Observable.just(EmptySnapshot())
+    return visible.switchMap { isVisible ->
+        if (isVisible) snapshots else Observable.just(EmptySnapshot())
     }
 }
 
 internal fun List<AdapterPart>.combine(): Observable<AdapterPartSnapshot> {
-    val snapshots: List<Observable<AdapterPartSnapshot>> = map { part ->
-        part.compose()
-    }
-    return Observable.combineLatest(snapshots) { snapshots ->
-        CompositeAdapterPartSnapshot(snapshots.map { it as AdapterPartSnapshot })
+    return Observable.combineLatest(map(AdapterPart::compose)) { snapshots ->
+        CompositeAdapterPartSnapshot(snapshots.map { snapshot -> snapshot as AdapterPartSnapshot })
     }
 }
 
