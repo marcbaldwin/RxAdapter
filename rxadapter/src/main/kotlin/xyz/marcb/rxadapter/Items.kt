@@ -6,18 +6,17 @@ import java.util.*
 
 class Items<I: Any, VH: RecyclerView.ViewHolder>(
         val vhClass: Class<VH>,
-        val items: Observable<List<I>>)
+        private val items: Observable<List<I>>)
     : AdapterPart {
 
     var binder: ((I, VH) -> Unit)? = null
     var id: ((I) -> String)? = null
     override var visible: Observable<Boolean>? = null
 
-    override val snapshots: Observable<AdapterPartSnapshot> get() {
-        return items.map { items -> ItemsSnapshot(items) }
-    }
+    override val snapshots: Observable<AdapterPartSnapshot> get() =
+        items.map { items -> ItemsSnapshot(items) }
 
-    internal inner class ItemsSnapshot(val items: List<I>) : AdapterPartSnapshot {
+    internal inner class ItemsSnapshot(private val items: List<I>) : AdapterPartSnapshot {
 
         override val itemIds: List<String> = items.map { id?.invoke(it) ?: UUID.randomUUID().toString() }
 

@@ -11,9 +11,7 @@ class Item<VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>) : AdapterPart {
 
     private val id = UUID.randomUUID().toString()
 
-    override val snapshots: Observable<AdapterPartSnapshot> get() {
-        return Observable.just(ItemSnapshot())
-    }
+    override val snapshots: Observable<AdapterPartSnapshot> get() = Observable.just(ItemSnapshot())
 
     internal inner class ItemSnapshot: AdapterPartSnapshot {
 
@@ -26,6 +24,6 @@ class Item<VH: RecyclerView.ViewHolder>(val vhClass: Class<VH>) : AdapterPart {
             binder?.invoke(viewHolder as VH)
         }
 
-        override fun underlyingObject(index: Int): Any = this
+        override fun underlyingObject(index: Int): Any = id
     }
 }

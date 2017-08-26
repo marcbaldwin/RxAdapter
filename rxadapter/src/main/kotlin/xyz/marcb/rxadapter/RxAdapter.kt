@@ -27,9 +27,7 @@ class RxAdapter {
         }
     }
 
-    fun create(): RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        return Adapter(vhFactories, vhRecyclers, sections)
-    }
+    fun create(): RecyclerView.Adapter<RecyclerView.ViewHolder> = Adapter(vhFactories, vhRecyclers, sections)
 }
 
 internal class Adapter(
@@ -55,9 +53,7 @@ internal class Adapter(
         snapshot.bind(holder, position)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return snapshot.viewHolderClass(position).hashCode()
-    }
+    override fun getItemViewType(position: Int): Int = snapshot.viewHolderClass(position).hashCode()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val factory = vhFactories[viewType] ?: error("Missing factory for view holder")

@@ -16,7 +16,7 @@ internal class CompositeAdapterPartSnapshot(val parts: List<AdapterPartSnapshot>
         adapter.bind(viewHolder, index = adjustedIndex)
     }
 
-    internal fun adapterWithAdjustedIndex(index: Int): Pair<AdapterPartSnapshot, Int> {
+    private fun adapterWithAdjustedIndex(index: Int): Pair<AdapterPartSnapshot, Int> {
         var currentIndex = 0
         for (part in parts) {
             currentIndex += part.itemCount
