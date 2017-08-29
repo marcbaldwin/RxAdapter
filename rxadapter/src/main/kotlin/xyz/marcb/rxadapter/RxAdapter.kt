@@ -3,6 +3,7 @@ package xyz.marcb.rxadapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import rx.Subscription
 
 class RxAdapter {
 
@@ -33,17 +34,23 @@ class RxAdapter {
 internal class Adapter(
         private val vhFactories: Map<Int, (ViewGroup) -> RecyclerView.ViewHolder>,
         private val vhRecyclers: Map<Int, (RecyclerView.ViewHolder) -> Unit>,
-        parts: List<AdapterPart>)
+        private val parts: List<AdapterPart>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var snapshot: AdapterPartSnapshot = EmptySnapshot()
+    private var adapterCount = 0
+    private var subscription: Subscription? = null
 
-    init {
-        parts.combine().subscribe { newSnapshot ->
-            val diff = DiffUtil.calculateDiff(AdapterPartSnapshotDelta(snapshot, newSnapshot))
-            snapshot = newSnapshot
-            diff.dispatchUpdatesTo(this)
-        }
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        adapterCount += 1
+        onAdapterCountChange()
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        adapterCount -= 1
+        onAdapterCountChange()
     }
 
     override fun getItemCount(): Int = snapshot.itemCount
@@ -62,5 +69,23 @@ internal class Adapter(
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         vhRecyclers[holder.javaClass.hashCode()]?.invoke(holder)
+    }
+
+    private fun onAdapterCountChange() {
+        when (adapterCount) {
+            0 -> {
+                subscription?.unsubscribe()
+                subscription = null
+            }
+            else -> {
+                if (subscription == null) {
+                    subscription = parts.combine().subscribe { newSnapshot ->
+                        val diff = DiffUtil.calculateDiff(AdapterPartSnapshotDelta(snapshot, newSnapshot))
+                        snapshot = newSnapshot
+                        diff.dispatchUpdatesTo(this)
+                    }
+                }
+            }
+        }
     }
 }
