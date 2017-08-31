@@ -11,23 +11,32 @@ class Section: AdapterPart {
 
     private val parts = ArrayList<AdapterPart>()
 
-    fun <VH: RecyclerView.ViewHolder> item(vhClass: Class<VH>, init: (Item<VH>.() -> Unit)? = null): Item<VH> {
-        val part = add(Item(vhClass))
+    fun <VH> item(vhClass: Class<VH>, init: (StaticItem<VH>.() -> Unit)? = null): StaticItem<VH>
+            where VH: RecyclerView.ViewHolder {
+        val part = add(StaticItem(vhClass))
         init?.invoke(part)
         return part
     }
 
-    fun <I: Any, VH: RecyclerView.ViewHolder> item(vhClass: Class<VH>, item: Observable<I?>, init: (OptionalItem<I, VH>.() -> Unit)? = null): OptionalItem<I, VH> {
+    fun <I, VH> item(vhClass: Class<VH>, item: Observable<I>, init: (Item<I, VH>.() -> Unit)? = null): Item<I, VH>
+            where I: Any?, VH: RecyclerView.ViewHolder {
+        val part = add(Item(vhClass, item))
+        init?.invoke(part)
+        return part
+    }
+
+    fun <I, VH> optionalItem(vhClass: Class<VH>, item: Observable<I?>, init: (OptionalItem<I, VH>.() -> Unit)? = null): OptionalItem<I, VH>
+            where I: Any, VH: RecyclerView.ViewHolder {
         val part = add(OptionalItem(vhClass, item))
         init?.invoke(part)
         return part
     }
 
-    fun <I: Any, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: List<I>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
-        return items(vhClass, Observable.just(items), init)
-    }
+    fun <I, VH> items(vhClass: Class<VH>, items: List<I>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> where I: Any, VH: RecyclerView.ViewHolder =
+            items(vhClass, Observable.just(items), init)
 
-    fun <I: Any, VH: RecyclerView.ViewHolder> items(vhClass: Class<VH>, items: Observable<List<I>>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH> {
+    fun <I, VH> items(vhClass: Class<VH>, items: Observable<List<I>>, init: (Items<I, VH>.() -> Unit)? = null): Items<I, VH>
+            where I: Any, VH: RecyclerView.ViewHolder {
         val part = add(Items(vhClass, items))
         init?.invoke(part)
         return part

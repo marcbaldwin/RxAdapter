@@ -17,11 +17,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import xyz.marcb.rxadapter.Item;
 import xyz.marcb.rxadapter.Items;
 import xyz.marcb.rxadapter.RxAdapter;
 import xyz.marcb.rxadapter.Section;
+import xyz.marcb.rxadapter.StaticItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,9 +59,18 @@ public class MainActivity extends AppCompatActivity {
         );
 
         final Section headerSection = adapter.section(null);
-        final Item<HeaderViewHolder> headerRow = headerSection.item(HeaderViewHolder.class, null);
+
+        // Static item
+        final StaticItem<HeaderViewHolder> headerRow = headerSection.item(HeaderViewHolder.class, null);
         headerRow.setBinder(viewHolder -> {
             viewHolder.title.setText("Dates to Remember");
+            return null;
+        });
+
+        // Nullable item
+        final Item<String,HeaderViewHolder> optionalHeader = headerSection.item(HeaderViewHolder.class, Observable.just(null), null);
+        optionalHeader.setBinder((s, viewHolder) -> {
+            viewHolder.title.setText("Nulls are allowed");
             return null;
         });
 
@@ -74,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         final Section datesSection = adapter.section(null);
 
-        final Item<DateViewHolder> now = datesSection.item(DateViewHolder.class, null);
+        // Observable items
+        final StaticItem<DateViewHolder> now = datesSection.item(DateViewHolder.class, null);
         now.setBinder((viewHolder -> {
             viewHolder.title.setText("TODAY");
             return null;

@@ -27,7 +27,7 @@ internal class CompositeAdapterPartSnapshot(val parts: List<AdapterPartSnapshot>
         throw IllegalArgumentException("Internal error: Index exceeded item count")
     }
 
-    override fun underlyingObject(index: Int): Any {
+    override fun underlyingObject(index: Int): Any? {
         val (adapter, adjustedIndex) = adapterWithAdjustedIndex(index)
         return adapter.underlyingObject(index = adjustedIndex)
     }

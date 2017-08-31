@@ -19,7 +19,6 @@ class CombineTests {
 
     lateinit var snapshotSubscriber: TestSubscriber<AdapterPartSnapshot>
 
-
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 

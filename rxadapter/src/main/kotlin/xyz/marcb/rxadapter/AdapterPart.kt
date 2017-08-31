@@ -16,7 +16,7 @@ interface AdapterPartSnapshot {
 
     fun viewHolderClass(index: Int): Class<out RecyclerView.ViewHolder>
     fun bind(viewHolder: RecyclerView.ViewHolder, index: Int)
-    fun underlyingObject(index: Int): Any
+    fun underlyingObject(index: Int): Any?
 }
 
 internal fun AdapterPart.compose(): Observable<AdapterPartSnapshot> {

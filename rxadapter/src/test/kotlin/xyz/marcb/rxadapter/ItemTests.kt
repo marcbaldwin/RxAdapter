@@ -5,40 +5,60 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import rx.Observable
 import rx.observers.TestSubscriber
 import kotlin.test.expect
 
-internal class ItemTests {
+class ItemTests {
 
-    lateinit var item: Item<HeaderViewHolder>
+    lateinit var item: Item<String?, HeaderViewHolder>
     @Mock lateinit var viewHolder: HeaderViewHolder
-    val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
+    private val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
-        item = Item(HeaderViewHolder::class.java).apply {
-            binder = { vh -> vh.bind("Test") }
+    }
+
+    private fun createWith(observable: Observable<String?>) {
+        item = Item(HeaderViewHolder::class.java, observable).apply {
+            binder = { item, viewHolder -> viewHolder.bind(item) }
         }
-    }
-
-    fun subscribeTakeFirst(): AdapterPartSnapshot {
         item.snapshots.subscribe(snapshotSubscriber)
-        return snapshotSubscriber.onNextEvents[0]
     }
 
-    @Test fun itemCountIsAlwaysOne() {
-        val snapshot = subscribeTakeFirst()
-        expect(1) { snapshot.itemCount }
+    @Test fun itemCountIsOneForNonNullValue() {
+        createWith(Observable.just("A"))
+        expect(1) { snapshotSubscriber.onNextEvents[0].itemCount }
     }
 
-    @Test fun viewHolderClass() {
-        val snapshot = subscribeTakeFirst()
+    @Test fun itemCountIsOneForNullValue() {
+        createWith(Observable.just(null))
+        expect(1) { snapshotSubscriber.onNextEvents[0].itemCount }
+    }
+
+    @Test fun viewHolderClassForNonNullValue() {
+        createWith(Observable.just("A"))
+        val snapshot = snapshotSubscriber.onNextEvents[0]
         expect(HeaderViewHolder::class.java) { snapshot.viewHolderClass(0) }
     }
 
-    @Test fun binderIsInvoked() {
-        val snapshot = subscribeTakeFirst()
+    @Test fun viewHolderClassForNullValue() {
+        createWith(Observable.just(null))
+        val snapshot = snapshotSubscriber.onNextEvents[0]
+        expect(HeaderViewHolder::class.java) { snapshot.viewHolderClass(0) }
+    }
+
+    @Test fun binderIsInvokedForNonNullValue() {
+        createWith(Observable.just("A"))
+        val snapshot = snapshotSubscriber.onNextEvents[0]
         snapshot.bind(viewHolder, index = 0)
-        Mockito.verify(viewHolder).bind("Test")
+        Mockito.verify(viewHolder).bind("A")
+    }
+
+    @Test fun binderIsInvokedForNullValue() {
+        createWith(Observable.just(null))
+        val snapshot = snapshotSubscriber.onNextEvents[0]
+        snapshot.bind(viewHolder, index = 0)
+        Mockito.verify(viewHolder).bind(null)
     }
 }

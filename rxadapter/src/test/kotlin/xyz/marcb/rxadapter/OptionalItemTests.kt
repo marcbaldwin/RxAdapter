@@ -13,13 +13,13 @@ class OptionalItemTests {
 
     lateinit var item: OptionalItem<String, HeaderViewHolder>
     @Mock lateinit var viewHolder: HeaderViewHolder
-    val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
+    private val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
     }
 
-    fun createWith(observable: Observable<String?>) {
+    private fun createWith(observable: Observable<String?>) {
         item = OptionalItem(HeaderViewHolder::class.java, observable).apply {
             binder = { item, viewHolder -> viewHolder.bind(item) }
         }

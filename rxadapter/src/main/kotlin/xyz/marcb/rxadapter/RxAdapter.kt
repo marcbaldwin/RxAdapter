@@ -31,10 +31,9 @@ class RxAdapter {
     fun create(): RecyclerView.Adapter<RecyclerView.ViewHolder> = Adapter(vhFactories, vhRecyclers, sections)
 }
 
-internal class Adapter(
-        private val vhFactories: Map<Int, (ViewGroup) -> RecyclerView.ViewHolder>,
-        private val vhRecyclers: Map<Int, (RecyclerView.ViewHolder) -> Unit>,
-        private val parts: List<AdapterPart>)
+internal class Adapter(private val vhFactories: Map<Int, (ViewGroup) -> RecyclerView.ViewHolder>,
+                       private val vhRecyclers: Map<Int, (RecyclerView.ViewHolder) -> Unit>,
+                       private val parts: List<AdapterPart>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var snapshot: AdapterPartSnapshot = EmptySnapshot()
