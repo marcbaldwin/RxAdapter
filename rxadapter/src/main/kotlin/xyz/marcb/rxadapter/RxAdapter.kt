@@ -5,11 +5,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import rx.Subscription
 
-class RxAdapter {
+open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val sections = ArrayList<AdapterPart>()
     private val vhFactories = HashMap<Int, (ViewGroup) -> RecyclerView.ViewHolder>()
     private val vhRecyclers = HashMap<Int, (RecyclerView.ViewHolder) -> Unit>()
+
+    private var snapshot: AdapterPartSnapshot = EmptySnapshot()
+    private var adapterCount = 0
+    private var subscription: Subscription? = null
 
     fun section(init: (Section.() -> Unit)? = null): Section {
         val section = Section()
@@ -27,18 +31,6 @@ class RxAdapter {
             }
         }
     }
-
-    fun create(): RecyclerView.Adapter<RecyclerView.ViewHolder> = Adapter(vhFactories, vhRecyclers, sections)
-}
-
-internal class Adapter(private val vhFactories: Map<Int, (ViewGroup) -> RecyclerView.ViewHolder>,
-                       private val vhRecyclers: Map<Int, (RecyclerView.ViewHolder) -> Unit>,
-                       private val parts: List<AdapterPart>)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private var snapshot: AdapterPartSnapshot = EmptySnapshot()
-    private var adapterCount = 0
-    private var subscription: Subscription? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -78,7 +70,7 @@ internal class Adapter(private val vhFactories: Map<Int, (ViewGroup) -> Recycler
             }
             else -> {
                 if (subscription == null) {
-                    subscription = parts.combine().subscribe { newSnapshot ->
+                    subscription = sections.combine().subscribe { newSnapshot ->
                         val diff = DiffUtil.calculateDiff(AdapterPartSnapshotDelta(snapshot, newSnapshot))
                         snapshot = newSnapshot
                         diff.dispatchUpdatesTo(this)

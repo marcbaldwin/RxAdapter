@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Bind it
         listView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        listView.setAdapter(adapter.create());
+        listView.setAdapter(adapter);
     }
 
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
