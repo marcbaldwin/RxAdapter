@@ -16,6 +16,11 @@ internal class CompositeAdapterPartSnapshot(val parts: List<AdapterPartSnapshot>
         adapter.bind(viewHolder, index = adjustedIndex)
     }
 
+    override fun underlyingObject(index: Int): Any? {
+        val (adapter, adjustedIndex) = adapterWithAdjustedIndex(index)
+        return adapter.underlyingObject(index = adjustedIndex)
+    }
+
     private fun adapterWithAdjustedIndex(index: Int): Pair<AdapterPartSnapshot, Int> {
         var currentIndex = 0
         for (part in parts) {
@@ -25,10 +30,5 @@ internal class CompositeAdapterPartSnapshot(val parts: List<AdapterPartSnapshot>
             }
         }
         throw IllegalArgumentException("Internal error: Index exceeded item count")
-    }
-
-    override fun underlyingObject(index: Int): Any? {
-        val (adapter, adjustedIndex) = adapterWithAdjustedIndex(index)
-        return adapter.underlyingObject(index = adjustedIndex)
     }
 }
