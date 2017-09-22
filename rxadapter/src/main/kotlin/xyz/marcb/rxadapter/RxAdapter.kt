@@ -15,10 +15,10 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var adapterCount = 0
     private var subscription: Subscription? = null
 
-    fun section(init: (Section.() -> Unit)? = null): Section {
+    inline fun section(init: Section.() -> Unit): Section {
         val section = Section()
-        init?.invoke(section)
-        sections.add(section)
+        init.invoke(section)
+        addSection(section)
         return section
     }
 
@@ -31,6 +31,8 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
         }
     }
+
+    fun addSection(section: Section) = sections.add(section)
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)

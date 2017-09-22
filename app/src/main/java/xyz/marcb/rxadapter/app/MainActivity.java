@@ -58,17 +58,17 @@ public class MainActivity extends AppCompatActivity {
                 ), null
         );
 
-        final Section headerSection = adapter.section(null);
+        final Section headerSection = adapter.section(section -> null);
 
         // Static item
-        final StaticItem<HeaderViewHolder> headerRow = headerSection.item(HeaderViewHolder.class, null);
+        final StaticItem<HeaderViewHolder> headerRow = headerSection.item(HeaderViewHolder.class, row -> null);
         headerRow.setBinder(viewHolder -> {
             viewHolder.title.setText("Dates to Remember");
             return null;
         });
 
         // Nullable item
-        final Item<String,HeaderViewHolder> optionalHeader = headerSection.item(HeaderViewHolder.class, Observable.just(null), null);
+        final Item<String,HeaderViewHolder> optionalHeader = headerSection.item(HeaderViewHolder.class, Observable.just(null), row -> null);
         optionalHeader.setBinder((s, viewHolder) -> {
             viewHolder.title.setText("Nulls are allowed");
             return null;
@@ -83,16 +83,16 @@ public class MainActivity extends AppCompatActivity {
                 ), null
         );
 
-        final Section datesSection = adapter.section(null);
+        final Section datesSection = adapter.section(row -> null);
 
         // Observable items
-        final StaticItem<DateViewHolder> now = datesSection.item(DateViewHolder.class, null);
+        final StaticItem<DateViewHolder> now = datesSection.item(DateViewHolder.class, row -> null);
         now.setBinder((viewHolder -> {
             viewHolder.title.setText("TODAY");
             return null;
         }));
 
-        final Items<Date, DateViewHolder> items = datesSection.items(DateViewHolder.class, this.items, null);
+        final Items<Date, DateViewHolder> items = datesSection.items(DateViewHolder.class, this.items, row -> null);
         items.setId((date -> "" + date.hashCode()));
         items.setBinder((date, viewHolder) -> {
             viewHolder.title.setText(date.toLocaleString());
