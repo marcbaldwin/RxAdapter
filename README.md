@@ -1,7 +1,7 @@
 # RxAdapter
 [![](https://jitpack.io/v/marcbaldwin/RxAdapter.svg)](https://jitpack.io/#marcbaldwin/RxAdapter)
 
-Rx wrapper for RecyclerView Adapters
+Rx wrapper for ```RecyclerView``` that allows you to create an ```Adapter``` from Rx observables.
 
 ## Getting started
 
@@ -29,17 +29,8 @@ val adapter = Adapter().apply {
 
 	//// Register your view holders
 
-	registerViewHolder(HeaderViewHolder::class.java, { parent ->
-		HeaderViewHolder(
-			LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
-		)
-	})
-
-	registerViewHolder(DateViewHolder::class.java, { parent ->
-		DateViewHolder(
-			LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
-		)
-	})
+	registerViewHolder(HeaderViewHolder::class.java, R.layout.item_header)
+	registerViewHolder(DateViewHolder::class.java, R.layout.item_header)
 
 	//// Add your items
 
@@ -47,7 +38,7 @@ val adapter = Adapter().apply {
 	section {
 		item(HeaderViewHolder::class.java) {
 			binder = { viewHolder ->
-					viewHolder.title.text = R.string.todo_list_title
+				viewHolder.title.text = R.string.todo_list_title
 			}
 		}
 	}
@@ -62,6 +53,13 @@ val adapter = Adapter().apply {
 		}
 	}
 
+	// Placeholder (Only visible if no items 😎)
+	section {
+		visible = items.map { it.isEmpty }
+		binder = { viewHolder ->
+			viewHolder.title.text = R.string.no_items
+		}
+	}
 }
 
 //// Set your recycler view's adapter
@@ -72,4 +70,5 @@ recyclerView.adapter = adapter
 
 ## Contributors
 
-Marc Baldwin [@marcbaldwin](https://github.com/marcbaldwin)
+- Marc Baldwin [@marcbaldwin](https://github.com/marcbaldwin)
+- Chetan Padia [@chetbox](https://github.com/chetbox)

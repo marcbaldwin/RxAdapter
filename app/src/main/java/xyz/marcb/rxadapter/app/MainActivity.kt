@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import rx.Observable
@@ -39,15 +38,12 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = RxAdapter()
 
+        adapter.registerViewHolder(HeaderViewHolder::class.java, R.layout.item_header)
+        adapter.registerViewHolder(DateViewHolder::class.java, R.layout.item_header)
+
         //
         // Header Section
         //
-        adapter.registerViewHolder(HeaderViewHolder::class.java, { parent ->
-            HeaderViewHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
-            )
-        })
-
         adapter.section {
 
             // Static item
@@ -68,12 +64,6 @@ class MainActivity : AppCompatActivity() {
         //
         // Dates Section
         //
-        adapter.registerViewHolder(DateViewHolder::class.java, { parent ->
-            DateViewHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false)
-            )
-        })
-
         adapter.section {
 
             // Observable items

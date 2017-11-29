@@ -1,7 +1,10 @@
 package xyz.marcb.rxadapter
 
+import android.support.annotation.LayoutRes
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import rx.Subscription
 
@@ -30,6 +33,15 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 recycler(viewHolder as VH)
             }
         }
+    }
+
+    fun <VH> registerViewHolder(viewHolder: Class<VH>, @LayoutRes layout: Int) where VH : RecyclerView.ViewHolder {
+        registerViewHolder(viewHolder,
+                factory = { parent ->
+                    val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
+                    viewHolder.getConstructor(View::class.java).newInstance(view)
+                }
+        )
     }
 
     fun addSection(section: Section) = sections.add(section)
