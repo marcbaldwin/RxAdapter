@@ -12,7 +12,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val sections = ArrayList<AdapterPart>()
     private val vhFactories = HashMap<Int, (ViewGroup) -> RecyclerView.ViewHolder>()
-    private val vhRecyclers = HashMap<Int, (RecyclerView.ViewHolder) -> Unit>()
+    private val vhOnRecycledHandlers = HashMap<Int, (RecyclerView.ViewHolder) -> Unit>()
 
     private var snapshot: AdapterPartSnapshot = EmptySnapshot()
     private var adapterCount = 0
@@ -26,21 +26,22 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <VH: RecyclerView.ViewHolder> registerViewHolder(vhClass: Class<VH>, factory: (ViewGroup) -> RecyclerView.ViewHolder, recycler: ((VH) -> Unit)? = null) {
+    fun <VH: RecyclerView.ViewHolder> registerViewHolder(vhClass: Class<VH>, factory: (ViewGroup) -> RecyclerView.ViewHolder, onRecycled: ((VH) -> Unit)? = null) {
         vhFactories[vhClass.hashCode()] = factory
-        if (recycler != null) {
-            vhRecyclers[vhClass.hashCode()] = { viewHolder ->
-                recycler(viewHolder as VH)
+        if (onRecycled != null) {
+            vhOnRecycledHandlers[vhClass.hashCode()] = { viewHolder ->
+                onRecycled(viewHolder as VH)
             }
         }
     }
 
-    fun <VH> registerViewHolder(viewHolder: Class<VH>, @LayoutRes layout: Int) where VH : RecyclerView.ViewHolder {
+    fun <VH> registerViewHolder(viewHolder: Class<VH>, @LayoutRes layout: Int, onRecycled: ((VH) -> Unit)? = null) where VH : RecyclerView.ViewHolder {
         registerViewHolder(viewHolder,
                 factory = { parent ->
                     val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
                     viewHolder.getConstructor(View::class.java).newInstance(view)
-                }
+                },
+                onRecycled = onRecycled
         )
     }
 
@@ -61,7 +62,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = snapshot.itemCount
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        vhRecyclers[holder.javaClass.hashCode()]?.invoke(holder)
+        vhOnRecycledHandlers[holder.javaClass.hashCode()]?.invoke(holder)
         snapshot.bind(holder, position)
     }
 
@@ -73,7 +74,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-        vhRecyclers[holder.javaClass.hashCode()]?.invoke(holder)
+        vhOnRecycledHandlers[holder.javaClass.hashCode()]?.invoke(holder)
     }
 
     private fun onAdapterCountChange() {
