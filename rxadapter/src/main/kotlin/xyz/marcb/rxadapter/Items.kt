@@ -4,11 +4,12 @@ import android.support.v7.widget.RecyclerView
 import rx.Observable
 import java.util.*
 
-class Items<I, VH>(private val vhClass: Class<VH>,
-                   private val items: Observable<List<I>>)
-    : AdapterPart where I: Any, VH: RecyclerView.ViewHolder {
+class Items<I, VH>(
+        private val vhClass: Class<VH>,
+        private val items: Observable<List<I>>
+) : AdapterPart where I: Any, VH: RecyclerView.ViewHolder {
 
-    var binder: ((I, VH) -> Unit)? = null
+    var binder: (VH.(I) -> Unit)? = null
     var id: ((I) -> String)? = null
     override var visible: Observable<Boolean>? = null
 

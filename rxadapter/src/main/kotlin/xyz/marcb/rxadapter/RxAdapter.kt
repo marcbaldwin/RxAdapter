@@ -26,7 +26,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <VH: RecyclerView.ViewHolder> registerViewHolder(vhClass: Class<VH>, factory: (ViewGroup) -> RecyclerView.ViewHolder, onRecycled: ((VH) -> Unit)? = null) {
+    fun <VH: RecyclerView.ViewHolder> registerViewHolder(vhClass: Class<VH>, factory: (ViewGroup) -> RecyclerView.ViewHolder, onRecycled: (VH.() -> Unit)? = null) {
         vhFactories[vhClass.hashCode()] = factory
         if (onRecycled != null) {
             vhOnRecycledHandlers[vhClass.hashCode()] = { viewHolder ->
@@ -35,11 +35,11 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun <VH> registerViewHolder(viewHolder: Class<VH>, @LayoutRes layout: Int, onRecycled: ((VH) -> Unit)? = null) where VH : RecyclerView.ViewHolder {
-        registerViewHolder(viewHolder,
+    fun <VH> registerViewHolder(vhClass: Class<VH>, @LayoutRes layout: Int, onRecycled: (VH.() -> Unit)? = null) where VH : RecyclerView.ViewHolder {
+        registerViewHolder(vhClass,
                 factory = { parent ->
                     val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-                    viewHolder.getConstructor(View::class.java).newInstance(view)
+                    vhClass.getConstructor(View::class.java).newInstance(view)
                 },
                 onRecycled = onRecycled
         )

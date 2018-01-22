@@ -48,15 +48,15 @@ class MainActivity : AppCompatActivity() {
 
             // Static item
             item(HeaderViewHolder::class.java) {
-                binder = { viewHolder ->
-                    viewHolder.title.text = "Dates to Remember"
+                binder = {
+                    title.text = "Dates to Remember"
                 }
             }
 
             // Nullable item
             optionalItem<String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(null)) {
-                binder = { _, viewHolder ->
-                    viewHolder.title.text = "Nulls are allowed"
+                binder = { _->
+                    title.text = "Nulls are allowed"
                 }
             }
         }
@@ -68,16 +68,16 @@ class MainActivity : AppCompatActivity() {
 
             // Observable items
             item(DateViewHolder::class.java) {
-                binder = { viewHolder ->
-                    viewHolder.title.text = "TODAY"
+                binder = {
+                    title.text = "TODAY"
                 }
             }
 
             items(DateViewHolder::class.java, items) {
                 id = { date -> "" + date.hashCode() }
-                binder = { date, viewHolder ->
-                    viewHolder.title.text = date.toLocaleString()
-                    viewHolder.itemView.setOnClickListener({
+                binder = { date ->
+                    title.text = date.toLocaleString()
+                    itemView.setOnClickListener({
                         val newItems = ArrayList<Date>(items.value)
                         newItems.remove(date)
                         items.onNext(newItems)
@@ -92,13 +92,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     internal class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var title: TextView = itemView.findViewById(R.id.title)
-
+        val title: TextView = itemView.findViewById(R.id.title)
     }
 
     internal class DateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var title: TextView = itemView.findViewById(R.id.title)
+        val title: TextView = itemView.findViewById(R.id.title)
     }
 }

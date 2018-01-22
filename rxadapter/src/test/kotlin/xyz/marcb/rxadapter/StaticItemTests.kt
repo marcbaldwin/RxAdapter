@@ -17,7 +17,7 @@ internal class StaticItemTests {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
         item = StaticItem(HeaderViewHolder::class.java).apply {
-            binder = { vh -> vh.bind("Test") }
+            binder = { bind("Test") }
         }
     }
 

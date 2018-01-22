@@ -37,8 +37,8 @@ val adapter = Adapter().apply {
 	// Header
 	section {
 		item(HeaderViewHolder::class.java) {
-			binder = { viewHolder ->
-				viewHolder.title.text = R.string.todo_list_title
+			binder = {
+				title.text = R.string.todo_list_title
 			}
 		}
 	}
@@ -47,8 +47,8 @@ val adapter = Adapter().apply {
 	section {
 		items(DateViewHolder::class.java, items) {
 			id = { todoItem -> todoItem.id }
-			binder = { todoItem, viewHolder ->
-				viewHolder.title.text = todoItem.title
+			binder = { todoItem ->
+				title.text = todoItem.title
 			}
 		}
 	}
@@ -56,8 +56,8 @@ val adapter = Adapter().apply {
 	// Placeholder (Only visible if no items 😎)
 	section {
 		visible = items.map { it.isEmpty }
-		binder = { viewHolder ->
-			viewHolder.title.text = R.string.no_items
+		binder = {
+			title.text = R.string.no_items
 		}
 	}
 }

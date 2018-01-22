@@ -18,9 +18,7 @@ internal class ItemsTests {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
         items = Items(HeaderViewHolder::class.java, Observable.just(listOf("1", "2", "3"))).apply {
-            binder = { item, viewHolder ->
-                viewHolder.bind(item)
-            }
+            binder = { item -> bind(item) }
         }
         items.snapshots.subscribe(snapshotSubscriber)
     }
