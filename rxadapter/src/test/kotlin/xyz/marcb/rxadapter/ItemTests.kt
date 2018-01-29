@@ -11,9 +11,9 @@ import kotlin.test.expect
 
 class ItemTests {
 
-    lateinit var item: Item<String?, HeaderViewHolder>
-    @Mock lateinit var viewHolder: HeaderViewHolder
+    @Mock private lateinit var viewHolder: HeaderViewHolder
     private val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
+    private lateinit var item: Item<String?, HeaderViewHolder>
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)

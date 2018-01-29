@@ -9,13 +9,13 @@ import kotlin.test.expect
 
 internal class CompositeAdapterPartSnapshotTests {
 
-    @Mock lateinit var partA: AdapterPartSnapshot
-    @Mock lateinit var partB: AdapterPartSnapshot
-    @Mock lateinit var partC: AdapterPartSnapshot
+    @Mock private lateinit var partA: AdapterPartSnapshot
+    @Mock private lateinit var partB: AdapterPartSnapshot
+    @Mock private lateinit var partC: AdapterPartSnapshot
 
-    @Mock lateinit var viewHolder: HeaderViewHolder
+    @Mock private lateinit var viewHolder: HeaderViewHolder
 
-    lateinit var snapshot: CompositeAdapterPartSnapshot
+    private lateinit var snapshot: CompositeAdapterPartSnapshot
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)

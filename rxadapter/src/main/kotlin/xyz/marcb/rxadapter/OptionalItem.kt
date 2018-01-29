@@ -10,11 +10,12 @@ class OptionalItem<I, VH>(
 ) : AdapterPart where I: Any, VH: RecyclerView.ViewHolder {
 
     var binder: (VH.(I) -> Unit)? = null
+    var onClick: (VH.(I) -> Unit)? = null
     override var visible: Observable<Boolean>? = null
     private val id = UUID.randomUUID().toString()
 
     override val snapshots: Observable<AdapterPartSnapshot> get() =
         item.map { item ->
-            item?.let { Snapshot(vhClass, listOf(it), listOf(id), binder) } ?: EmptySnapshot()
+            item?.let { Snapshot(vhClass, listOf(it), listOf(id), binder, onClick) } ?: EmptySnapshot()
         }
 }

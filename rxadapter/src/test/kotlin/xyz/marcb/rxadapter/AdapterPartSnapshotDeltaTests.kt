@@ -9,8 +9,8 @@ import kotlin.test.expect
 
 internal class AdapterPartSnapshotDeltaTests {
 
-    @Mock lateinit var old: AdapterPartSnapshot
-    @Mock lateinit var new: AdapterPartSnapshot
+    @Mock private lateinit var old: AdapterPartSnapshot
+    @Mock private lateinit var new: AdapterPartSnapshot
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)

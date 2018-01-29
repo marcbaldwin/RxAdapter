@@ -10,9 +10,9 @@ import kotlin.test.expect
 
 internal class StaticItemTests {
 
-    lateinit var item: StaticItem<HeaderViewHolder>
-    @Mock lateinit var viewHolder: HeaderViewHolder
+    @Mock private lateinit var viewHolder: HeaderViewHolder
     private val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
+    private lateinit var item: StaticItem<HeaderViewHolder>
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)

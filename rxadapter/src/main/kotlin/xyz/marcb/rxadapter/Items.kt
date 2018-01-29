@@ -10,12 +10,13 @@ class Items<I, VH>(
 ) : AdapterPart where I: Any, VH: RecyclerView.ViewHolder {
 
     var binder: (VH.(I) -> Unit)? = null
+    var onClick: (VH.(I) -> Unit)? = null
     var id: ((I) -> String)? = null
     override var visible: Observable<Boolean>? = null
 
     override val snapshots: Observable<AdapterPartSnapshot> get() =
         items.map { items ->
             val ids = items.map { id?.invoke(it) ?: UUID.randomUUID().toString() }
-            Snapshot(vhClass, items, ids, binder)
+            Snapshot(vhClass, items, ids, binder, onClick)
         }
 }

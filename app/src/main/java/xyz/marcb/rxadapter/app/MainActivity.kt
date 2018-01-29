@@ -77,11 +77,11 @@ class MainActivity : AppCompatActivity() {
                 id = { date -> "" + date.hashCode() }
                 binder = { date ->
                     title.text = date.toLocaleString()
-                    itemView.setOnClickListener({
-                        val newItems = ArrayList<Date>(items.value)
-                        newItems.remove(date)
-                        items.onNext(newItems)
-                    })
+                }
+                onClick = { date ->
+                    val newItems = ArrayList<Date>(items.value)
+                    newItems.remove(date)
+                    items.onNext(newItems)
                 }
             }
         }

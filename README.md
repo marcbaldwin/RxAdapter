@@ -50,6 +50,9 @@ val adapter = Adapter().apply {
 			binder = { todoItem ->
 				title.text = todoItem.title
 			}
+			onClick = { todoItem ->
+				// Do something with the item
+			}
 		}
 	}
 
@@ -58,6 +61,9 @@ val adapter = Adapter().apply {
 		visible = items.map { it.isEmpty }
 		binder = {
 			title.text = R.string.no_items
+		}
+		onClick = { todoItem ->
+			// Do something with the item
 		}
 	}
 }

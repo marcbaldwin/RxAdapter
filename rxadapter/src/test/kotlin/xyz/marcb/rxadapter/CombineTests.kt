@@ -11,13 +11,13 @@ import kotlin.test.expect
 
 class CombineTests {
 
-    @Mock lateinit var adapterPartA: AdapterPart
-    @Mock lateinit var adapterPartB: AdapterPart
+    @Mock private lateinit var adapterPartA: AdapterPart
+    @Mock private lateinit var adapterPartB: AdapterPart
 
-    @Mock lateinit var adapterPartSnapshotA: AdapterPartSnapshot
-    @Mock lateinit var adapterPartSnapshotB: AdapterPartSnapshot
+    @Mock private lateinit var adapterPartSnapshotA: AdapterPartSnapshot
+    @Mock private lateinit var adapterPartSnapshotB: AdapterPartSnapshot
 
-    lateinit var snapshotSubscriber: TestSubscriber<AdapterPartSnapshot>
+    private lateinit var snapshotSubscriber: TestSubscriber<AdapterPartSnapshot>
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
