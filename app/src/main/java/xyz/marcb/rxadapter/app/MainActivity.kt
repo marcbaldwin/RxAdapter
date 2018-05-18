@@ -8,17 +8,19 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
-import rx.Observable
-import rx.subjects.BehaviorSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import xyz.marcb.rxadapter.Optional
 import xyz.marcb.rxadapter.RxAdapter
 import java.util.*
-import java.util.Collections.emptyList
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var listView: RecyclerView
 
-    private val items = BehaviorSubject.create<List<Date>>(emptyList<Date>())
+    private val items = BehaviorSubject.create<List<Date>>().apply {
+        onNext(emptyList())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +56,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Nullable item
-            optionalItem<String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(null)) {
+            optionalItem<String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(Optional.None)) {
                 binder = { _->
-                    title.text = "Nulls are allowed"
+                    title.text = "None is allowed"
                 }
             }
         }

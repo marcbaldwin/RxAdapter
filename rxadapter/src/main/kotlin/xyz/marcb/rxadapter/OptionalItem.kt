@@ -1,12 +1,12 @@
 package xyz.marcb.rxadapter
 
 import android.support.v7.widget.RecyclerView
-import rx.Observable
-import java.util.*
+import io.reactivex.Observable
+import java.util.UUID
 
 class OptionalItem<I, VH>(
         private val vhClass: Class<VH>,
-        private val item: Observable<I?>
+        private val item: Observable<Optional<I>>
 ) : AdapterPart where I: Any, VH: RecyclerView.ViewHolder {
 
     var binder: (VH.(I) -> Unit)? = null
@@ -16,6 +16,10 @@ class OptionalItem<I, VH>(
 
     override val snapshots: Observable<AdapterPartSnapshot> get() =
         item.map { item ->
-            item?.let { Snapshot(vhClass, listOf(it), listOf(id), binder, onClick) } ?: EmptySnapshot()
+            when (item) {
+                is Optional.Some -> Snapshot(vhClass, listOf(item.item), listOf(id), binder, onClick)
+                is Optional.None -> EmptySnapshot()
+            }
         }
+
 }

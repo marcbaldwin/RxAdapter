@@ -1,17 +1,17 @@
 package xyz.marcb.rxadapter
 
+import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import rx.observers.TestSubscriber
 import kotlin.test.expect
 
 internal class StaticItemTests {
 
     @Mock private lateinit var viewHolder: HeaderViewHolder
-    private val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
+    private val snapshotObserver = TestObserver<AdapterPartSnapshot>()
     private lateinit var item: StaticItem<HeaderViewHolder>
 
     @Before fun setUp() {
@@ -22,8 +22,8 @@ internal class StaticItemTests {
     }
 
     private fun subscribeTakeFirst(): AdapterPartSnapshot {
-        item.snapshots.subscribe(snapshotSubscriber)
-        return snapshotSubscriber.onNextEvents[0]
+        item.snapshots.subscribe(snapshotObserver)
+        return snapshotObserver.values()[0]
     }
 
     @Test fun itemCountIsAlwaysOne() {

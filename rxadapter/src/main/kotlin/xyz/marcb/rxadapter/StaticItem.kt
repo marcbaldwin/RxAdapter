@@ -1,8 +1,8 @@
 package xyz.marcb.rxadapter
 
 import android.support.v7.widget.RecyclerView
-import rx.Observable
-import java.util.*
+import io.reactivex.Observable
+import java.util.UUID
 
 class StaticItem<VH>(private val vhClass: Class<VH>)
     : AdapterPart where VH : RecyclerView.ViewHolder {

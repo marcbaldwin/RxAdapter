@@ -1,7 +1,7 @@
 package xyz.marcb.rxadapter
 
 import android.support.v7.widget.RecyclerView
-import rx.Observable
+import io.reactivex.Observable
 
 class Section: AdapterPart {
 
@@ -19,13 +19,13 @@ class Section: AdapterPart {
     }
 
     inline fun <I, VH> item(vhClass: Class<VH>, item: Observable<I>, init: Item<I, VH>.() -> Unit): Item<I, VH>
-            where I: Any?, VH: RecyclerView.ViewHolder {
+            where I: Any, VH: RecyclerView.ViewHolder {
         val part = add(Item(vhClass, item))
         init.invoke(part)
         return part
     }
 
-    inline fun <I, VH> optionalItem(vhClass: Class<VH>, item: Observable<I?>, init: OptionalItem<I, VH>.() -> Unit): OptionalItem<I, VH>
+    inline fun <I, VH> optionalItem(vhClass: Class<VH>, item: Observable<Optional<I>>, init: OptionalItem<I, VH>.() -> Unit): OptionalItem<I, VH>
             where I: Any, VH: RecyclerView.ViewHolder {
         val part = add(OptionalItem(vhClass, item))
         init.invoke(part)

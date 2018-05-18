@@ -1,13 +1,13 @@
 package xyz.marcb.rxadapter
 
 import android.support.v7.widget.RecyclerView
-import rx.Observable
-import java.util.*
+import io.reactivex.Observable
+import java.util.UUID
 
 class Item<I, VH>(
         private val vhClass: Class<VH>,
         private val item: Observable<I>
-) : AdapterPart where I: Any?, VH: RecyclerView.ViewHolder {
+) : AdapterPart where I: Any, VH: RecyclerView.ViewHolder {
 
     var binder: (VH.(I) -> Unit)? = null
     var onClick: (VH.(I) -> Unit)? = null

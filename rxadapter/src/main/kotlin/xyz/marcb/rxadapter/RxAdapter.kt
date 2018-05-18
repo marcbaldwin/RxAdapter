@@ -6,7 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import rx.Subscription
+import io.reactivex.disposables.Disposable
+import org.reactivestreams.Subscription
 
 open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -16,7 +17,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var snapshot: AdapterPartSnapshot = EmptySnapshot()
     private var adapterCount = 0
-    private var subscription: Subscription? = null
+    private var subscription: Disposable? = null
 
     inline fun section(init: Section.() -> Unit): Section {
         val section = Section()
@@ -80,7 +81,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private fun onAdapterCountChange() {
         when (adapterCount) {
             0 -> {
-                subscription?.unsubscribe()
+                subscription?.dispose()
                 subscription = null
             }
             else -> {

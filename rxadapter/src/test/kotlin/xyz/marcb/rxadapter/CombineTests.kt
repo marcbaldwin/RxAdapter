@@ -1,12 +1,13 @@
 package xyz.marcb.rxadapter
 
+import io.reactivex.Observable
+import io.reactivex.observers.TestObserver
+import io.reactivex.subscribers.TestSubscriber
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import rx.Observable
-import rx.observers.TestSubscriber
 import kotlin.test.expect
 
 class CombineTests {
@@ -17,7 +18,7 @@ class CombineTests {
     @Mock private lateinit var adapterPartSnapshotA: AdapterPartSnapshot
     @Mock private lateinit var adapterPartSnapshotB: AdapterPartSnapshot
 
-    private lateinit var snapshotSubscriber: TestSubscriber<AdapterPartSnapshot>
+    private lateinit var snapshotObserver: TestObserver<AdapterPartSnapshot>
 
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -29,34 +30,34 @@ class CombineTests {
         Mockito.`when`(adapterPartSnapshotA.itemCount).thenReturn(1)
         Mockito.`when`(adapterPartSnapshotB.itemCount).thenReturn(2)
 
-        snapshotSubscriber = TestSubscriber()
+        snapshotObserver = TestObserver()
     }
 
     @Test fun includesSnapshotsWithNoVisibilityObservable() {
-        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotObserver)
 
-        expect(3) { snapshotSubscriber.onNextEvents[0].itemCount }
+        expect(3) { snapshotObserver.values()[0].itemCount }
     }
 
     @Test fun includesVisibleSnapshots() {
         Mockito.`when`(adapterPartB.visible).thenReturn(Observable.just(true))
-        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotObserver)
 
-        expect(3) { snapshotSubscriber.onNextEvents[0].itemCount }
+        expect(3) { snapshotObserver.values()[0].itemCount }
     }
 
     @Test fun ignoresHiddenSnapshots() {
         Mockito.`when`(adapterPartB.visible).thenReturn(Observable.just(false))
-        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotObserver)
 
-        expect(1) { snapshotSubscriber.onNextEvents[0].itemCount }
+        expect(1) { snapshotObserver.values()[0].itemCount }
     }
 
     @Test fun emitsNewSnapshotWhenVisibilityChanges() {
         Mockito.`when`(adapterPartB.visible).thenReturn(Observable.just(false, true))
-        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotSubscriber)
+        listOf(adapterPartA, adapterPartB).combine().subscribe(snapshotObserver)
 
-        expect(1) { snapshotSubscriber.onNextEvents[0].itemCount }
-        expect(3) { snapshotSubscriber.onNextEvents[1].itemCount }
+        expect(1) { snapshotObserver.values()[0].itemCount }
+        expect(3) { snapshotObserver.values()[1].itemCount }
     }
 }
