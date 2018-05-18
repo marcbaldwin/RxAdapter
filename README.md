@@ -25,7 +25,7 @@ dependencies {
 
 ```Kotlin
 
-val adapter = Adapter().apply {
+val adapter = RxAdapter().apply {
 
 	//// Register your view holders
 
