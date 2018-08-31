@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion 27
+        targetSdkVersion rootProject.ext.compileSdkVersion
 
         applicationId "xyz.marcb.rxadapter.app"
         versionCode 1
