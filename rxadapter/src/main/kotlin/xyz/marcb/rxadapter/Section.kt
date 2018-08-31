@@ -1,6 +1,6 @@
 package xyz.marcb.rxadapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import rx.Observable
 
 class Section: AdapterPart {

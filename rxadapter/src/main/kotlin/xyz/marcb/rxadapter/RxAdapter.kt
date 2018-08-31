@@ -1,11 +1,11 @@
 package xyz.marcb.rxadapter
 
-import android.support.annotation.LayoutRes
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.DiffUtil
 import rx.Subscription
 
 open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {

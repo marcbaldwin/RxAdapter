@@ -1,6 +1,6 @@
 package xyz.marcb.rxadapter
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
 internal class AdapterPartSnapshotDelta(
         private val old: AdapterPartSnapshot, private val new: AdapterPartSnapshot)
