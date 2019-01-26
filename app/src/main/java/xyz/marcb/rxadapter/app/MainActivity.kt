@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Bind it
-        listView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        listView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         listView.adapter = adapter
     }
 

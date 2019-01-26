@@ -1,6 +1,8 @@
 buildscript {
-    ext.kotlin_version = '1.2.61'
-    ext.android_support_version = '27.1.1'
+    ext.kotlin_version = '1.3.20'
+    ext._minSdkVersion = 14
+    ext._targetSdkVersion = 28
+    ext._compileSdkVersion = 28
 
     repositories {
         google()
@@ -8,15 +10,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
-}
-
-ext {
-    minSdkVersion = 14
-    compileSdkVersion = 28
 }
 
 allprojects {
