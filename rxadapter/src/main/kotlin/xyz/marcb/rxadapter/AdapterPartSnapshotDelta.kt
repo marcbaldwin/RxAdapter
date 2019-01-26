@@ -3,8 +3,9 @@ package xyz.marcb.rxadapter
 import androidx.recyclerview.widget.DiffUtil
 
 internal class AdapterPartSnapshotDelta(
-        private val old: AdapterPartSnapshot, private val new: AdapterPartSnapshot)
-    : DiffUtil.Callback() {
+        private val old: AdapterPartSnapshot,
+        private val new: AdapterPartSnapshot
+) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = old.itemCount
     override fun getNewListSize(): Int = new.itemCount

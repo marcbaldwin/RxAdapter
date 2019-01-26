@@ -15,9 +15,9 @@ internal class AdapterPartSnapshotDeltaTests {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        Mockito.`when`(old.itemIds).thenReturn(listOf("A", "B"))
+        Mockito.`when`(old.itemIds).thenReturn(listOf(1, 2))
         Mockito.`when`(old.itemCount).thenReturn(2)
-        Mockito.`when`(new.itemIds).thenReturn(listOf("B", "C", "D"))
+        Mockito.`when`(new.itemIds).thenReturn(listOf(2, 3, 4))
         Mockito.`when`(new.itemCount).thenReturn(3)
     }
 

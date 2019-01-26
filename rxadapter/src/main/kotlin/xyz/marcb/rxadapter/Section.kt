@@ -11,23 +11,23 @@ class Section: AdapterPart {
 
     private val parts = ArrayList<AdapterPart>()
 
-    inline fun <VH> item(vhClass: Class<VH>, init: StaticItem<VH>.() -> Unit): StaticItem<VH>
+    inline fun <VH> item(vhClass: Class<VH>, id: Long = RecyclerView.NO_ID, init: StaticItem<VH>.() -> Unit): StaticItem<VH>
             where VH: RecyclerView.ViewHolder {
-        val part = add(StaticItem(vhClass))
+        val part = add(StaticItem(vhClass, id))
         init.invoke(part)
         return part
     }
 
-    inline fun <I, VH> item(vhClass: Class<VH>, item: Observable<I>, init: Item<I, VH>.() -> Unit): Item<I, VH>
+    inline fun <I, VH> item(vhClass: Class<VH>, item: Observable<I>, id: Long = RecyclerView.NO_ID, init: Item<I, VH>.() -> Unit): Item<I, VH>
             where I: Any?, VH: RecyclerView.ViewHolder {
-        val part = add(Item(vhClass, item))
+        val part = add(Item(vhClass, item, id))
         init.invoke(part)
         return part
     }
 
-    inline fun <I, VH> optionalItem(vhClass: Class<VH>, item: Observable<I?>, init: OptionalItem<I, VH>.() -> Unit): OptionalItem<I, VH>
+    inline fun <I, VH> optionalItem(vhClass: Class<VH>, item: Observable<I?>, id: Long = RecyclerView.NO_ID, init: OptionalItem<I, VH>.() -> Unit): OptionalItem<I, VH>
             where I: Any, VH: RecyclerView.ViewHolder {
-        val part = add(OptionalItem(vhClass, item))
+        val part = add(OptionalItem(vhClass, item, id))
         init.invoke(part)
         return part
     }

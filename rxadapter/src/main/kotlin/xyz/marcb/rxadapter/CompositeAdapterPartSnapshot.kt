@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 internal class CompositeAdapterPartSnapshot(val parts: List<AdapterPartSnapshot>) : AdapterPartSnapshot {
 
-    override val itemIds: List<String> = parts.flatMap { it.itemIds }
+    override val itemIds: List<Long> = parts.flatMap { it.itemIds }
 
     override fun viewHolderClass(index: Int): Class<out RecyclerView.ViewHolder> {
         val (adapter, adjustedIndex) = adapterWithAdjustedIndex(index)

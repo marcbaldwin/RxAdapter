@@ -62,6 +62,8 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = snapshot.itemCount
 
+    override fun getItemId(position: Int): Long = snapshot.itemIds[position]
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         vhOnRecycledHandlers[holder.javaClass.hashCode()]?.invoke(holder)
         snapshot.bind(holder, position)

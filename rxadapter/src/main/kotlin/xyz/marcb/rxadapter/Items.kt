@@ -2,7 +2,6 @@ package xyz.marcb.rxadapter
 
 import androidx.recyclerview.widget.RecyclerView
 import rx.Observable
-import java.util.*
 
 class Items<I, VH>(
         private val vhClass: Class<VH>,
@@ -11,12 +10,12 @@ class Items<I, VH>(
 
     var binder: (VH.(I) -> Unit)? = null
     var onClick: (VH.(I) -> Unit)? = null
-    var id: ((I) -> String)? = null
+    var id: ((I) -> Long)? = null
     override var visible: Observable<Boolean>? = null
 
     override val snapshots: Observable<AdapterPartSnapshot> get() =
         items.map { items ->
-            val ids = items.map { id?.invoke(it) ?: UUID.randomUUID().toString() }
+            val ids = items.map { id?.invoke(it) ?: RecyclerView.NO_ID }
             Snapshot(vhClass, items, ids, binder, onClick)
         }
 }

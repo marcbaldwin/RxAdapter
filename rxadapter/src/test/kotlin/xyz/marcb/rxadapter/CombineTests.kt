@@ -24,8 +24,8 @@ class CombineTests {
 
         Mockito.`when`(adapterPartA.snapshots).thenReturn(Observable.just(adapterPartSnapshotA))
         Mockito.`when`(adapterPartB.snapshots).thenReturn(Observable.just(adapterPartSnapshotB))
-        Mockito.`when`(adapterPartSnapshotA.itemIds).thenReturn(listOf("A"))
-        Mockito.`when`(adapterPartSnapshotB.itemIds).thenReturn(listOf("B", "C"))
+        Mockito.`when`(adapterPartSnapshotA.itemIds).thenReturn(listOf(1))
+        Mockito.`when`(adapterPartSnapshotB.itemIds).thenReturn(listOf(2, 3))
         Mockito.`when`(adapterPartSnapshotA.itemCount).thenReturn(1)
         Mockito.`when`(adapterPartSnapshotB.itemCount).thenReturn(2)
 

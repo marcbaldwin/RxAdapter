@@ -2,20 +2,17 @@ package xyz.marcb.rxadapter
 
 import androidx.recyclerview.widget.RecyclerView
 import rx.Observable
-import java.util.*
 
-class StaticItem<VH>(private val vhClass: Class<VH>)
+class StaticItem<VH>(private val vhClass: Class<VH>, private val id: Long = RecyclerView.NO_ID)
     : AdapterPart where VH : RecyclerView.ViewHolder {
 
     var binder: (VH.() -> Unit)? = null
     var onClick: (VH.() -> Unit)? = null
     override var visible: Observable<Boolean>? = null
 
-    private val id = UUID.randomUUID().toString()
-
     override val snapshots: Observable<AdapterPartSnapshot> get() {
-        val binderTransformer: (VH.(String) -> Unit)? = binder?.let { binder -> { binder.invoke(this) } }
-        val onClickTransformer: (VH.(String) -> Unit)? = onClick?.let { onClick -> { onClick.invoke(this) } }
+        val binderTransformer: (VH.(Long) -> Unit)? = binder?.let { binder -> { binder.invoke(this) } }
+        val onClickTransformer: (VH.(Long) -> Unit)? = onClick?.let { onClick -> { onClick.invoke(this) } }
         return Observable.just(
                 Snapshot(vhClass, listOf(id), listOf(id), binderTransformer, onClickTransformer)
         )

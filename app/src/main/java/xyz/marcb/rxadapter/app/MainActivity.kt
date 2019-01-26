@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val adapter = RxAdapter()
+        adapter.setHasStableIds(true)
 
         adapter.registerViewHolder(HeaderViewHolder::class.java, R.layout.item_header)
         adapter.registerViewHolder(DateViewHolder::class.java, R.layout.item_header)
@@ -47,14 +48,14 @@ class MainActivity : AppCompatActivity() {
         adapter.section {
 
             // Static item
-            item(HeaderViewHolder::class.java) {
+            item(HeaderViewHolder::class.java, id = 1) {
                 binder = {
                     title.text = "Dates to Remember"
                 }
             }
 
             // Nullable item
-            optionalItem<String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(null)) {
+            optionalItem<String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(null), id = 2) {
                 binder = { _->
                     title.text = "Nulls are allowed"
                 }
@@ -67,14 +68,14 @@ class MainActivity : AppCompatActivity() {
         adapter.section {
 
             // Observable items
-            item(DateViewHolder::class.java) {
+            item(DateViewHolder::class.java, id = 3) {
                 binder = {
                     title.text = "TODAY"
                 }
             }
 
             items(DateViewHolder::class.java, items) {
-                id = { date -> "" + date.hashCode() }
+                id = { date -> date.time }
                 binder = { date ->
                     title.text = date.toLocaleString()
                 }
