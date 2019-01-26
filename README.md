@@ -17,7 +17,7 @@ allprojects {
 2. Add a dependency to ***RxAdapter***
 ```
 dependencies {
-	implementation 'com.github.marcbaldwin:RxAdapter:1.12.0'
+	implementation 'com.github.marcbaldwin:RxAdapter:2.0.0'
 }
 ```
 
@@ -27,16 +27,18 @@ dependencies {
 
 val adapter = RxAdapter().apply {
 
-	//// Register your view holders
+  // Supports stable IDS if ids specified
+  setHasStableIds(true)
 
+	// Register your view holders
 	registerViewHolder(HeaderViewHolder::class.java, R.layout.item_header)
 	registerViewHolder(DateViewHolder::class.java, R.layout.item_header)
 
-	//// Add your items
+	// Add your items
 
 	// Header
 	section {
-		item(HeaderViewHolder::class.java) {
+		item(HeaderViewHolder::class.java, id = HEADER_ID) {
 			binder = {
 				title.text = R.string.todo_list_title
 			}
@@ -59,17 +61,15 @@ val adapter = RxAdapter().apply {
 	// Placeholder (Only visible if no items 😎)
 	section {
 		visible = items.map { it.isEmpty }
-		binder = {
-			title.text = R.string.no_items
-		}
-		onClick = { todoItem ->
-			// Do something with the item
-		}
+        item(HeaderViewHolder::class.java, id = PLACEHOLDER_ID) {
+            binder = {
+                title.text = R.string.no_items
+            }
+        }
 	}
 }
 
-//// Set your recycler view's adapter
-
+// Set your recycler view's adapter
 recyclerView.adapter = adapter
 
 ```
