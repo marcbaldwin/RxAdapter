@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var listView: RecyclerView
 
-    private val items = BehaviorSubject.create<List<Date>>(emptyList<Date>())
+    private val items = BehaviorSubject.create<List<Date>>(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val fab = findViewById<View>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener {
-            val newItems = ArrayList<Date>(this.items.value)
+            val newItems = ArrayList(this.items.value)
             newItems.add(Date())
             this.items.onNext(newItems)
         }
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                     title.text = date.toLocaleString()
                 }
                 onClick = { date ->
-                    val newItems = ArrayList<Date>(items.value)
+                    val newItems = ArrayList(items.value)
                     newItems.remove(date)
                     items.onNext(newItems)
                 }
@@ -90,6 +90,11 @@ class MainActivity : AppCompatActivity() {
         // Bind it
         listView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         listView.adapter = adapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        listView.adapter = null
     }
 
     internal class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
