@@ -1,10 +1,12 @@
-package xyz.marcb.rxadapter
+package xyz.marcb.rxadapter.internal
 
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import xyz.marcb.rxadapter.AdapterPartSnapshot
+import xyz.marcb.rxadapter.HeaderViewHolder
 import kotlin.test.expect
 
 internal class CompositeAdapterPartSnapshotTests {

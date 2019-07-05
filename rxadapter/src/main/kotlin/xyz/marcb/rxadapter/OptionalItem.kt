@@ -2,6 +2,8 @@ package xyz.marcb.rxadapter
 
 import androidx.recyclerview.widget.RecyclerView
 import rx.Observable
+import xyz.marcb.rxadapter.internal.EmptySnapshot
+import xyz.marcb.rxadapter.internal.Snapshot
 
 class OptionalItem<I, VH>(
         private val vhClass: Class<VH>,
