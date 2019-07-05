@@ -1,6 +1,7 @@
-package xyz.marcb.rxadapter
+package xyz.marcb.rxadapter.internal
 
 import androidx.recyclerview.widget.RecyclerView
+import xyz.marcb.rxadapter.AdapterPartSnapshot
 
 internal class Snapshot<I, VH>(
         private val vhClass: Class<VH>,

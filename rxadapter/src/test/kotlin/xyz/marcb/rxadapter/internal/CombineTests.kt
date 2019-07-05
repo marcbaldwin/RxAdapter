@@ -1,4 +1,4 @@
-package xyz.marcb.rxadapter
+package xyz.marcb.rxadapter.internal
 
 import org.junit.Before
 import org.junit.Test
@@ -7,6 +7,9 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import rx.Observable
 import rx.observers.TestSubscriber
+import xyz.marcb.rxadapter.AdapterPart
+import xyz.marcb.rxadapter.AdapterPartSnapshot
+import xyz.marcb.rxadapter.combine
 import kotlin.test.expect
 
 class CombineTests {

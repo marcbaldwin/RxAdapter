@@ -2,6 +2,7 @@ package xyz.marcb.rxadapter
 
 import androidx.recyclerview.widget.RecyclerView
 import rx.Observable
+import xyz.marcb.rxadapter.internal.Snapshot
 
 class Items<I, VH>(
         private val vhClass: Class<VH>,

@@ -7,6 +7,8 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import rx.Subscription
+import xyz.marcb.rxadapter.internal.AdapterPartSnapshotDelta
+import xyz.marcb.rxadapter.internal.EmptySnapshot
 import java.util.*
 
 open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {

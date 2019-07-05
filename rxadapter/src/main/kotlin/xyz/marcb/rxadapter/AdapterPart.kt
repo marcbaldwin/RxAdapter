@@ -2,6 +2,8 @@ package xyz.marcb.rxadapter
 
 import androidx.recyclerview.widget.RecyclerView
 import rx.Observable
+import xyz.marcb.rxadapter.internal.CompositeAdapterPartSnapshot
+import xyz.marcb.rxadapter.internal.EmptySnapshot
 
 interface AdapterPart {
 
@@ -29,22 +31,5 @@ internal fun AdapterPart.compose(): Observable<AdapterPartSnapshot> {
 internal fun List<AdapterPart>.combine(): Observable<AdapterPartSnapshot> {
     return Observable.combineLatest(map(AdapterPart::compose)) { snapshots ->
         CompositeAdapterPartSnapshot(snapshots.map { snapshot -> snapshot as AdapterPartSnapshot })
-    }
-}
-
-internal class EmptySnapshot : AdapterPartSnapshot {
-
-    override val itemIds: List<Long> = emptyList()
-
-    override fun viewHolderClass(index: Int): Class<out RecyclerView.ViewHolder> {
-        error("Internal error: Attempted to get view holder class from an empty snapshot")
-    }
-
-    override fun bind(viewHolder: RecyclerView.ViewHolder, index: Int) {
-        error("Internal error: Attempted to bind view holder to an empty snapshot")
-    }
-
-    override fun underlyingObject(index: Int): Any {
-        error("Internal error: Attempted to get underlying object of an empty snapshot")
     }
 }
