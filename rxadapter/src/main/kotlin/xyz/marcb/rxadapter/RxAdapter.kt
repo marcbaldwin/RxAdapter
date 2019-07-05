@@ -1,5 +1,6 @@
 package xyz.marcb.rxadapter
 
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,8 @@ import java.util.*
 open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val sections = ArrayList<AdapterPart>()
-    private val vhFactories = HashMap<Int, (ViewGroup) -> RecyclerView.ViewHolder>()
-    private val vhOnRecycledHandlers = HashMap<Int, (RecyclerView.ViewHolder) -> Unit>()
+    private val vhFactories = SparseArray<(ViewGroup) -> RecyclerView.ViewHolder>()
+    private val vhOnRecycledHandlers = SparseArray<(RecyclerView.ViewHolder) -> Unit>()
 
     private var snapshot: AdapterPartSnapshot = EmptySnapshot()
     private var adapterCount = 0
@@ -30,10 +31,11 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     @Suppress("UNCHECKED_CAST")
     fun <VH: RecyclerView.ViewHolder> registerViewHolder(vhClass: Class<VH>, factory: (ViewGroup) -> RecyclerView.ViewHolder, onRecycled: (VH.() -> Unit)? = null) {
-        vhFactories[vhClass.hashCode()] = factory
-        if (onRecycled != null) {
-            vhOnRecycledHandlers[vhClass.hashCode()] = { viewHolder ->
-                onRecycled(viewHolder as VH)
+        vhFactories.put(vhClass.hashCode(), factory)
+
+        onRecycled?.run {
+            vhOnRecycledHandlers.put(vhClass.hashCode()) { viewHolder ->
+                this(viewHolder as VH)
             }
         }
     }
