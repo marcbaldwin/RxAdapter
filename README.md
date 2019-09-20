@@ -17,7 +17,7 @@ allprojects {
 2. Add a dependency to ***RxAdapter***
 ```
 dependencies {
-	implementation 'com.github.marcbaldwin:RxAdapter:2.0.0'
+	implementation 'com.github.marcbaldwin:RxAdapter:3.0.0'
 }
 ```
 
@@ -61,12 +61,12 @@ val adapter = RxAdapter().apply {
 	// Placeholder (Only visible if no items 😎)
 	section {
 		visible = items.map { it.isEmpty }
-        item(HeaderViewHolder::class.java, id = PLACEHOLDER_ID) {
-            binder = {
-                title.text = R.string.no_items
-            }
-        }
-	}
+    item(HeaderViewHolder::class.java, id = PLACEHOLDER_ID) {
+      binder = {
+        title.text = R.string.no_items
+      }
+    }
+  }
 }
 
 // Set your recycler view's adapter

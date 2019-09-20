@@ -1,7 +1,7 @@
 package xyz.marcb.rxadapter
 
 import androidx.recyclerview.widget.RecyclerView
-import rx.Observable
+import io.reactivex.Observable
 import xyz.marcb.rxadapter.internal.CompositeAdapterPartSnapshot
 import xyz.marcb.rxadapter.internal.EmptySnapshot
 
@@ -30,6 +30,8 @@ internal fun AdapterPart.compose(): Observable<AdapterPartSnapshot> {
 
 internal fun List<AdapterPart>.combine(): Observable<AdapterPartSnapshot> {
     return Observable.combineLatest(map(AdapterPart::compose)) { snapshots ->
-        CompositeAdapterPartSnapshot(snapshots.map { snapshot -> snapshot as AdapterPartSnapshot })
+        CompositeAdapterPartSnapshot(
+                snapshots.map { snapshot -> snapshot as AdapterPartSnapshot }
+        )
     }
 }

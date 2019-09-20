@@ -1,9 +1,9 @@
 package xyz.marcb.rxadapter.internal
 
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import xyz.marcb.rxadapter.AdapterPartSnapshot
 import kotlin.test.expect
@@ -16,10 +16,10 @@ internal class AdapterPartSnapshotDeltaTests {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        Mockito.`when`(old.itemIds).thenReturn(listOf(1, 2))
-        Mockito.`when`(old.itemCount).thenReturn(2)
-        Mockito.`when`(new.itemIds).thenReturn(listOf(2, 3, 4))
-        Mockito.`when`(new.itemCount).thenReturn(3)
+        whenever(old.itemIds).thenReturn(listOf(1, 2))
+        whenever(old.itemCount).thenReturn(2)
+        whenever(new.itemIds).thenReturn(listOf(2, 3, 4))
+        whenever(new.itemCount).thenReturn(3)
     }
 
     @Test fun itemSize() {

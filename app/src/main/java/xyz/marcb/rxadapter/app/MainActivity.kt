@@ -8,17 +8,18 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import rx.Observable
-import rx.subjects.BehaviorSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import xyz.marcb.rxadapter.RxAdapter
 import java.util.*
 import java.util.Collections.emptyList
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var listView: RecyclerView
 
-    private val items = BehaviorSubject.create<List<Date>>(emptyList())
+    private val items = BehaviorSubject.createDefault<List<Date>>(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         val fab = findViewById<View>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener {
-            val newItems = ArrayList(this.items.value)
+            val newItems = ArrayList(this.items.value!!)
             newItems.add(Date())
             this.items.onNext(newItems)
         }
@@ -55,9 +56,16 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Nullable item
-            optionalItem<String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(null), id = 2) {
-                binder = { _->
-                    title.text = "Nulls are allowed"
+            optionalItem<Unit, String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(Unit), { null }, id = 2) {
+                binder = { text ->
+                    title.text = text
+                }
+            }
+
+            // Nullable item
+            optionalItem<Unit, String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(Unit), { "Hi" }, id = 2) {
+                binder = { text ->
+                    title.text = text
                 }
             }
         }
@@ -80,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                     title.text = date.toLocaleString()
                 }
                 onClick = { date ->
-                    val newItems = ArrayList(items.value)
+                    val newItems = ArrayList(items.value!!)
                     newItems.remove(date)
                     items.onNext(newItems)
                 }

@@ -1,9 +1,10 @@
 package xyz.marcb.rxadapter.internal
 
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import xyz.marcb.rxadapter.AdapterPartSnapshot
 import xyz.marcb.rxadapter.HeaderViewHolder
@@ -22,14 +23,14 @@ internal class CompositeAdapterPartSnapshotTests {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        Mockito.`when`(partA.itemIds).thenReturn(listOf(1))
-        Mockito.`when`(partA.itemCount).thenReturn(1)
+        whenever(partA.itemIds).thenReturn(listOf(1))
+        whenever(partA.itemCount).thenReturn(1)
 
-        Mockito.`when`(partB.itemIds).thenReturn(listOf(2, 3))
-        Mockito.`when`(partB.itemCount).thenReturn(2)
+        whenever(partB.itemIds).thenReturn(listOf(2, 3))
+        whenever(partB.itemCount).thenReturn(2)
 
-        Mockito.`when`(partC.itemIds).thenReturn(listOf(4))
-        Mockito.`when`(partC.itemCount).thenReturn(1)
+        whenever(partC.itemIds).thenReturn(listOf(4))
+        whenever(partC.itemCount).thenReturn(1)
 
         snapshot = CompositeAdapterPartSnapshot(parts = listOf(partA, partB, partC))
     }
@@ -44,29 +45,29 @@ internal class CompositeAdapterPartSnapshotTests {
 
     @Test fun viewHolderClassDelegatesToPartWithAdjustedIndex() {
         snapshot.viewHolderClass(0)
-        Mockito.verify(partA).viewHolderClass(0)
+        verify(partA).viewHolderClass(0)
 
         snapshot.viewHolderClass(1)
-        Mockito.verify(partB).viewHolderClass(0)
+        verify(partB).viewHolderClass(0)
 
         snapshot.viewHolderClass(2)
-        Mockito.verify(partB).viewHolderClass(1)
+        verify(partB).viewHolderClass(1)
 
         snapshot.viewHolderClass(3)
-        Mockito.verify(partC).viewHolderClass(0)
+        verify(partC).viewHolderClass(0)
     }
 
     @Test fun bindDelegatesToPartWithAdjustedIndex() {
         snapshot.bind(viewHolder, 0)
-        Mockito.verify(partA).bind(viewHolder, 0)
+        verify(partA).bind(viewHolder, 0)
 
         snapshot.bind(viewHolder, 1)
-        Mockito.verify(partB).bind(viewHolder, 0)
+        verify(partB).bind(viewHolder, 0)
 
         snapshot.bind(viewHolder, 2)
-        Mockito.verify(partB).bind(viewHolder, 1)
+        verify(partB).bind(viewHolder, 1)
 
         snapshot.bind(viewHolder, 3)
-        Mockito.verify(partC).bind(viewHolder, 0)
+        verify(partC).bind(viewHolder, 0)
     }
 }
