@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import rx.Subscription
+import io.reactivex.disposables.Disposable
 import xyz.marcb.rxadapter.internal.AdapterPartSnapshotDelta
 import xyz.marcb.rxadapter.internal.EmptySnapshot
 import java.util.*
 
-open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+open class RxAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val sections = ArrayList<AdapterPart>()
     private val vhFactories = SparseArray<(ViewGroup) -> RecyclerView.ViewHolder>()
@@ -20,7 +20,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var snapshot: AdapterPartSnapshot = EmptySnapshot()
     private var adapterCount = 0
-    private var subscription: Subscription? = null
+    private var subscription: Disposable? = null
 
     inline fun section(init: Section.() -> Unit): Section {
         val section = Section()
@@ -30,9 +30,12 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <VH: RecyclerView.ViewHolder> registerViewHolder(vhClass: Class<VH>, factory: (ViewGroup) -> RecyclerView.ViewHolder, onRecycled: (VH.() -> Unit)? = null) {
+    fun <VH : RecyclerView.ViewHolder> registerViewHolder(
+            vhClass: Class<VH>,
+            factory: (ViewGroup) -> RecyclerView.ViewHolder,
+            onRecycled: (VH.() -> Unit)? = null
+    ) {
         vhFactories.put(vhClass.hashCode(), factory)
-
         onRecycled?.run {
             vhOnRecycledHandlers.put(vhClass.hashCode()) { viewHolder ->
                 this(viewHolder as VH)
@@ -40,7 +43,11 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun <VH> registerViewHolder(vhClass: Class<VH>, @LayoutRes layout: Int, onRecycled: (VH.() -> Unit)? = null) where VH : RecyclerView.ViewHolder {
+    fun <VH> registerViewHolder(
+            vhClass: Class<VH>,
+            @LayoutRes layout: Int,
+            onRecycled: (VH.() -> Unit)? = null
+    ) where VH : RecyclerView.ViewHolder {
         registerViewHolder(vhClass,
                 factory = { parent ->
                     val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
@@ -68,16 +75,17 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemId(position: Int): Long = snapshot.itemIds[position]
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        vhOnRecycledHandlers[holder.javaClass.hashCode()]?.invoke(holder)
-        snapshot.bind(holder, position)
-    }
-
-    override fun getItemViewType(position: Int): Int = snapshot.viewHolderClass(position).hashCode()
+    override fun getItemViewType(position: Int): Int =
+            snapshot.viewHolderClass(position).hashCode()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val factory = vhFactories[viewType] ?: error("Missing factory for view holder")
         return factory(parent)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        vhOnRecycledHandlers[holder.javaClass.hashCode()]?.invoke(holder)
+        snapshot.bind(holder, position)
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
@@ -87,7 +95,7 @@ open class RxAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private fun onAdapterCountChange() {
         when (adapterCount) {
             0 -> {
-                subscription?.unsubscribe()
+                subscription?.dispose()
                 subscription = null
             }
             else -> {

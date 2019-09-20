@@ -1,17 +1,17 @@
 package xyz.marcb.rxadapter
 
+import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import rx.observers.TestSubscriber
 import kotlin.test.expect
 
 internal class StaticItemTests {
 
     @Mock private lateinit var viewHolder: HeaderViewHolder
-    private val snapshotSubscriber = TestSubscriber<AdapterPartSnapshot>()
+    private lateinit var testObserver: TestObserver<AdapterPartSnapshot>
     private lateinit var item: StaticItem<HeaderViewHolder>
 
     @Before fun setUp() {
@@ -19,26 +19,19 @@ internal class StaticItemTests {
         item = StaticItem(HeaderViewHolder::class.java).apply {
             binder = { bind("Test") }
         }
-    }
-
-    private fun subscribeTakeFirst(): AdapterPartSnapshot {
-        item.snapshots.subscribe(snapshotSubscriber)
-        return snapshotSubscriber.onNextEvents[0]
+        testObserver = item.snapshots.test()
     }
 
     @Test fun itemCountIsAlwaysOne() {
-        val snapshot = subscribeTakeFirst()
-        expect(1) { snapshot.itemCount }
+        expect(1) { testObserver.values()[0].itemCount }
     }
 
     @Test fun viewHolderClass() {
-        val snapshot = subscribeTakeFirst()
-        expect(HeaderViewHolder::class.java) { snapshot.viewHolderClass(0) }
+        expect(HeaderViewHolder::class.java) { testObserver.values()[0].viewHolderClass(0) }
     }
 
     @Test fun binderIsInvoked() {
-        val snapshot = subscribeTakeFirst()
-        snapshot.bind(viewHolder, index = 0)
-        Mockito.verify(viewHolder).bind("Test")
+        testObserver.values()[0].bind(viewHolder, index = 0)
+        verify(viewHolder).bind("Test")
     }
 }
