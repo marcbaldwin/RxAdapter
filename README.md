@@ -67,6 +67,20 @@ val adapter = RxAdapter().apply {
       }
     }
   }
+
+	// Optional item (Only visible if unwrapped value is not null)
+	section {
+		optionalItem(
+			HeaderViewHolder::class.java,
+			Observable.just(Optional<String>(null)),
+			unwrap = { it.value },
+			id = 3
+		) {
+			binder = { text ->
+				title.text = text
+			}
+		}
+	}
 }
 
 // Set your recycler view's adapter

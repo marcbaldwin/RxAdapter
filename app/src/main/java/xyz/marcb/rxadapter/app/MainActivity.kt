@@ -17,6 +17,8 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
+    data class Optional<T>(val value: T?)
+
     private lateinit var listView: RecyclerView
 
     private val items = BehaviorSubject.createDefault<List<Date>>(emptyList())
@@ -56,14 +58,24 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Nullable item
-            optionalItem<Unit, String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(Unit), { null }, id = 2) {
+            optionalItem(
+                    HeaderViewHolder::class.java,
+                    Observable.just(Optional("Hi")),
+                    unwrap = { it.value },
+                    id = 2
+            ) {
                 binder = { text ->
                     title.text = text
                 }
             }
 
             // Nullable item
-            optionalItem<Unit, String, HeaderViewHolder>(HeaderViewHolder::class.java, Observable.just(Unit), { "Hi" }, id = 2) {
+            optionalItem(
+                    HeaderViewHolder::class.java,
+                    Observable.just(Optional<String>(null)),
+                    unwrap = { it.value },
+                    id = 3
+            ) {
                 binder = { text ->
                     title.text = text
                 }
@@ -76,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         adapter.section {
 
             // Observable items
-            item(DateViewHolder::class.java, id = 3) {
+            item(DateViewHolder::class.java, id = 4) {
                 binder = {
                     title.text = "TODAY"
                 }
