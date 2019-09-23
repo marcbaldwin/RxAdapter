@@ -30,57 +30,45 @@ val adapter = RxAdapter().apply {
   // Supports stable IDS if ids specified
   setHasStableIds(true)
 
-	// Register your view holders
-	registerViewHolder(HeaderViewHolder::class.java, R.layout.item_header)
-	registerViewHolder(DateViewHolder::class.java, R.layout.item_header)
+  // Register your view holders
+  registerViewHolder(HeaderViewHolder::class.java, R.layout.item_header)
+  registerViewHolder(DateViewHolder::class.java, R.layout.item_header)
 
-	// Add your items
-
-	// Header
-	section {
-		item(HeaderViewHolder::class.java, id = HEADER_ID) {
-			binder = {
-				title.text = R.string.todo_list_title
-			}
-		}
-	}
-
-	// Items
-	section {
-		items(DateViewHolder::class.java, items) {
-			id = { todoItem -> todoItem.id }
-			binder = { todoItem ->
-				title.text = todoItem.title
-			}
-			onClick = { todoItem ->
-				// Do something with the item
-			}
-		}
-	}
-
-	// Placeholder (Only visible if no items 😎)
-	section {
-		visible = items.map { it.isEmpty }
-    item(HeaderViewHolder::class.java, id = PLACEHOLDER_ID) {
-      binder = {
-        title.text = R.string.no_items
-      }
+  // Header
+  section {
+    item(HeaderViewHolder::class.java, id = HEADER_ID) {
+      binder = { title.text = R.string.todo_list_title }
     }
   }
 
-	// Optional item (Only visible if unwrapped value is not null)
-	section {
-		optionalItem(
-			HeaderViewHolder::class.java,
-			Observable.just(Optional<String>(null)),
-			unwrap = { it.value },
-			id = 3
-		) {
-			binder = { text ->
-				title.text = text
-			}
-		}
+  // Items
+  section {
+    items(DateViewHolder::class.java, items) {
+      id = { todoItem -> todoItem.id }
+      binder = { todoItem -> /* Bind item to the view holder */ }
+      onClick = { todoItem -> /* Do something with the item */ }
+    }
 	}
+
+  // Placeholder (Only visible if no items 😎)
+  section {
+    visible = items.map { it.isEmpty }
+    item(HeaderViewHolder::class.java, id = PLACEHOLDER_ID) {
+      binder = { title.text = R.string.no_items }
+    }
+  }
+
+  // Optional item (Only visible if unwrapped value is not null)
+  section {
+    optionalItem(
+      HeaderViewHolder::class.java,
+      Observable.just(Optional<String>(null)),
+      unwrap = { it.value },
+      id = 3
+    ) {
+      binder = { text -> title.text = text }
+    }
+  }
 }
 
 // Set your recycler view's adapter
