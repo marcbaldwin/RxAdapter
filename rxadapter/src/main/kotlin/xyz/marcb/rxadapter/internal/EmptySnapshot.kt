@@ -3,7 +3,7 @@ package xyz.marcb.rxadapter.internal
 import androidx.recyclerview.widget.RecyclerView
 import xyz.marcb.rxadapter.AdapterPartSnapshot
 
-internal class EmptySnapshot : AdapterPartSnapshot {
+internal object EmptySnapshot : AdapterPartSnapshot {
 
     override val itemIds: List<Long> = emptyList()
 

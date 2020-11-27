@@ -24,7 +24,7 @@ interface AdapterPartSnapshot {
 internal fun AdapterPart.compose(): Observable<AdapterPartSnapshot> {
     val visible = visible ?: return snapshots
     return visible.switchMap { isVisible ->
-        if (isVisible) snapshots else Observable.just(EmptySnapshot())
+        if (isVisible) snapshots else Observable.just(EmptySnapshot)
     }
 }
 

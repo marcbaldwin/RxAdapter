@@ -20,6 +20,6 @@ class OptionalItem<O, I, VH>(
         get() = item.map { item ->
             unwrap(item)
                 ?.let { Snapshot(vhClass, listOf(it), listOf(id), binder, onClick) }
-                ?: EmptySnapshot()
+                ?: EmptySnapshot
         }
 }
