@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.Disposable
 import xyz.marcb.rxadapter.internal.AdapterPartSnapshotDelta
 import xyz.marcb.rxadapter.internal.EmptySnapshot
-import java.util.*
 
 open class RxAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -31,9 +30,9 @@ open class RxAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     @Suppress("UNCHECKED_CAST")
     fun <VH : RecyclerView.ViewHolder> registerViewHolder(
-            vhClass: Class<VH>,
-            factory: (ViewGroup) -> RecyclerView.ViewHolder,
-            onRecycled: (VH.() -> Unit)? = null
+        vhClass: Class<VH>,
+        factory: (ViewGroup) -> RecyclerView.ViewHolder,
+        onRecycled: (VH.() -> Unit)? = null
     ) {
         vhFactories.put(vhClass.hashCode(), factory)
         onRecycled?.run {
@@ -44,16 +43,17 @@ open class RxAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun <VH> registerViewHolder(
-            vhClass: Class<VH>,
-            @LayoutRes layout: Int,
-            onRecycled: (VH.() -> Unit)? = null
+        vhClass: Class<VH>,
+        @LayoutRes layout: Int,
+        onRecycled: (VH.() -> Unit)? = null
     ) where VH : RecyclerView.ViewHolder {
-        registerViewHolder(vhClass,
-                factory = { parent ->
-                    val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-                    vhClass.getConstructor(View::class.java).newInstance(view)
-                },
-                onRecycled = onRecycled
+        registerViewHolder(
+            vhClass,
+            factory = { parent ->
+                val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
+                vhClass.getConstructor(View::class.java).newInstance(view)
+            },
+            onRecycled = onRecycled
         )
     }
 
@@ -76,7 +76,7 @@ open class RxAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemId(position: Int): Long = snapshot.itemIds[position]
 
     override fun getItemViewType(position: Int): Int =
-            snapshot.viewHolderClass(position).hashCode()
+        snapshot.viewHolderClass(position).hashCode()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val factory = vhFactories[viewType] ?: error("Missing factory for view holder")

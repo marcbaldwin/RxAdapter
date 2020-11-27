@@ -11,8 +11,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import xyz.marcb.rxadapter.RxAdapter
-import java.util.*
 import java.util.Collections.emptyList
+import java.util.Date
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listView: RecyclerView
 
     private val items = BehaviorSubject.createDefault<List<Date>>(emptyList())
+    private val adapter = RxAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             this.items.onNext(newItems)
         }
 
-        val adapter = RxAdapter()
         adapter.setHasStableIds(true)
 
         adapter.registerViewHolder(HeaderViewHolder::class.java, R.layout.item_header)
@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity() {
 
             // Nullable item
             optionalItem(
-                    HeaderViewHolder::class.java,
-                    Observable.just(Optional("Hi")),
-                    unwrap = { it.value },
-                    id = 2
+                HeaderViewHolder::class.java,
+                Observable.just(Optional("Hi")),
+                unwrap = { it.value },
+                id = 2
             ) {
                 binder = { text ->
                     title.text = text
@@ -71,10 +71,10 @@ class MainActivity : AppCompatActivity() {
 
             // Nullable item
             optionalItem(
-                    HeaderViewHolder::class.java,
-                    Observable.just(Optional<String>(null)),
-                    unwrap = { it.value },
-                    id = 3
+                HeaderViewHolder::class.java,
+                Observable.just(Optional<String>(null)),
+                unwrap = { it.value },
+                id = 3
             ) {
                 binder = { text ->
                     title.text = text
@@ -109,7 +109,16 @@ class MainActivity : AppCompatActivity() {
 
         // Bind it
         listView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        listView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        listView.swapAdapter(adapter, false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        listView.swapAdapter(null, false)
     }
 
     override fun onDestroy() {

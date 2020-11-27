@@ -31,7 +31,7 @@ internal fun AdapterPart.compose(): Observable<AdapterPartSnapshot> {
 internal fun List<AdapterPart>.combine(): Observable<AdapterPartSnapshot> {
     return Observable.combineLatest(map(AdapterPart::compose)) { snapshots ->
         CompositeAdapterPartSnapshot(
-                snapshots.map { snapshot -> snapshot as AdapterPartSnapshot }
+            snapshots.map { snapshot -> snapshot as AdapterPartSnapshot }
         )
     }
 }
