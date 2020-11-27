@@ -4,11 +4,11 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.marcb.rxadapter.AdapterPartSnapshot
 
 internal class Snapshot<I, VH>(
-        private val vhClass: Class<VH>,
-        private val items: List<I>,
-        override val itemIds: List<Long>,
-        private val binder: (VH.(I) -> Unit)?,
-        private val onClick: (VH.(I) -> Unit)?
+    private val vhClass: Class<VH>,
+    private val items: List<I>,
+    override val itemIds: List<Long>,
+    private val binder: (VH.(I) -> Unit)?,
+    private val onClick: (VH.(I) -> Unit)?
 ) : AdapterPartSnapshot where I : Any?, VH : RecyclerView.ViewHolder {
 
     override fun viewHolderClass(index: Int): Class<VH> = vhClass

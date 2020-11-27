@@ -5,8 +5,8 @@ import io.reactivex.Observable
 import xyz.marcb.rxadapter.internal.Snapshot
 
 class StaticItem<VH>(
-        private val vhClass: Class<VH>,
-        private val id: Long = RecyclerView.NO_ID
+    private val vhClass: Class<VH>,
+    private val id: Long = RecyclerView.NO_ID
 ) : AdapterPart where VH : RecyclerView.ViewHolder {
 
     var binder: (VH.() -> Unit)? = null
@@ -18,7 +18,7 @@ class StaticItem<VH>(
             val binderTransformer: (VH.(Long) -> Unit)? = binder?.let { binder -> { binder.invoke(this) } }
             val onClickTransformer: (VH.(Long) -> Unit)? = onClick?.let { onClick -> { onClick.invoke(this) } }
             return Observable.just(
-                    Snapshot(vhClass, listOf(id), listOf(id), binderTransformer, onClickTransformer)
+                Snapshot(vhClass, listOf(id), listOf(id), binderTransformer, onClickTransformer)
             )
         }
 }

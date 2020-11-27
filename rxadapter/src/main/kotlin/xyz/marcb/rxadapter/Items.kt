@@ -5,8 +5,8 @@ import io.reactivex.Observable
 import xyz.marcb.rxadapter.internal.Snapshot
 
 class Items<I, VH>(
-        private val vhClass: Class<VH>,
-        private val items: Observable<List<I>>
+    private val vhClass: Class<VH>,
+    private val items: Observable<List<I>>
 ) : AdapterPart where VH : RecyclerView.ViewHolder {
 
     var binder: (VH.(I) -> Unit)? = null
