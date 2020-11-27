@@ -14,7 +14,7 @@ class Section : AdapterPart {
     inline fun <VH> item(
         vhClass: Class<VH>,
         id: Long = RecyclerView.NO_ID,
-        init: StaticItem<VH>.() -> Unit
+        init: StaticItem<VH>.() -> Unit = {}
     ): StaticItem<VH> where VH : RecyclerView.ViewHolder =
         add(StaticItem(vhClass, id)).apply { init.invoke(this) }
 
@@ -22,7 +22,7 @@ class Section : AdapterPart {
         vhClass: Class<VH>,
         item: Observable<I>,
         id: Long = RecyclerView.NO_ID,
-        init: Item<I, VH>.() -> Unit
+        init: Item<I, VH>.() -> Unit = {}
     ): Item<I, VH> where VH : RecyclerView.ViewHolder =
         add(Item(vhClass, item, id)).apply { init.invoke(this) }
 
@@ -31,14 +31,14 @@ class Section : AdapterPart {
         item: Observable<O>,
         noinline unwrap: (O) -> I?,
         id: Long = RecyclerView.NO_ID,
-        init: OptionalItem<O, I, VH>.() -> Unit
+        init: OptionalItem<O, I, VH>.() -> Unit = {}
     ): OptionalItem<O, I, VH> where VH : RecyclerView.ViewHolder =
         add(OptionalItem(vhClass, item, unwrap, id)).apply { init.invoke(this) }
 
     inline fun <I, VH> items(
         vhClass: Class<VH>,
         items: List<I>,
-        init: Items<I, VH>.() -> Unit
+        init: Items<I, VH>.() -> Unit = {}
     ): Items<I, VH> where VH : RecyclerView.ViewHolder =
         items(vhClass, Observable.just(items), init)
 

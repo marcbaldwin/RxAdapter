@@ -11,6 +11,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import xyz.marcb.rxadapter.RxAdapter
+import xyz.marcb.rxadapter.RxViewHolder
 import java.util.Collections.emptyList
 import java.util.Date
 import kotlin.collections.ArrayList
@@ -109,16 +110,17 @@ class MainActivity : AppCompatActivity() {
 
         // Bind it
         listView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        listView.adapter = adapter
     }
 
     override fun onResume() {
         super.onResume()
-        listView.swapAdapter(adapter, false)
+        adapter.start()
     }
 
     override fun onPause() {
         super.onPause()
-        listView.swapAdapter(null, false)
+        adapter.stop()
     }
 
     override fun onDestroy() {
@@ -126,11 +128,11 @@ class MainActivity : AppCompatActivity() {
         listView.adapter = null
     }
 
-    internal class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    internal class HeaderViewHolder(itemView: View) : RxViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.title)
     }
 
-    internal class DateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    internal class DateViewHolder(itemView: View) : RxViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.title)
     }
 }
