@@ -17,7 +17,7 @@ allprojects {
 2. Add a dependency to ***RxAdapter***
 ```
 dependencies {
-	implementation 'com.github.marcbaldwin:RxAdapter:3.0.0'
+	implementation 'com.github.marcbaldwin:RxAdapter:4.0.0'
 }
 ```
 
@@ -73,6 +73,15 @@ val adapter = RxAdapter().apply {
 
 // Set your recycler view's adapter
 recyclerView.adapter = adapter
+
+// Start the adapter
+adapter.start()
+
+// Stop the adapter
+adapter.stop()
+
+// Recycle all existing views
+recyclerView.adapter = null
 
 ```
 
