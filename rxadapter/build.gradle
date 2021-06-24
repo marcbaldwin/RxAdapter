@@ -3,10 +3,10 @@ apply plugin: 'kotlin-android'
 
 android {
 
-    compileSdkVersion rootProject.ext._compileSdkVersion
+    compileSdkVersion rootProject.ext.target_sdk
 
     defaultConfig {
-        minSdkVersion rootProject.ext._minSdkVersion
+        minSdkVersion rootProject.ext.min_sdk
     }
 
     buildTypes {

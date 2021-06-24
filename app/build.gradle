@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion rootProject.ext._compileSdkVersion
+    compileSdkVersion rootProject.ext.target_sdk
 
     defaultConfig {
-        minSdkVersion rootProject.ext._minSdkVersion
-        targetSdkVersion rootProject.ext._compileSdkVersion
+        minSdkVersion rootProject.ext.min_sdk
+        targetSdkVersion rootProject.ext.target_sdk
 
         applicationId "xyz.marcb.rxadapter.app"
         versionCode 1
