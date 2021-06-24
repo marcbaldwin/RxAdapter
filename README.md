@@ -17,7 +17,7 @@ allprojects {
 2. Add a dependency to ***RxAdapter***
 ```
 dependencies {
-	implementation 'com.github.marcbaldwin:RxAdapter:4.0.0'
+	implementation 'com.github.marcbaldwin:RxAdapter:4.1.0'
 }
 ```
 
